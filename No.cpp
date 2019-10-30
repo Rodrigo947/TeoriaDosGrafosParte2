@@ -1,15 +1,22 @@
 #include "No.h"
+#include <iostream>
+#include <fstream>
+using namespace std;
 
 //Construtor
-No::No(int id){
+No::No(int id, int x, int y){
 
     this->id = id;
     this->grau_entrada = 0;
     this->grau_saida = 0;
     this->peso = 0;
+    this->potencia = 0;
     this->primeira_aresta = nullptr;
     this->ultima_aresta = nullptr;
     this->proximo_no = nullptr;
+    this->primeiro_cliente = this->ultimo_cliente = nullptr;
+    this->x = x;
+    this->y = y;
 
 };
 
@@ -26,6 +33,16 @@ No::~No(){
         delete proxima_aresta;
         proxima_aresta = aux_aresta;
 
+    }
+
+    No *proximo_cliente = this->primeiro_cliente;
+
+    while (proximo_cliente != nullptr)
+    {
+        proximo_cliente->removerTodasArestas();
+        No *aux_no = proximo_cliente->getProximoNo();
+        delete proximo_cliente;
+        proximo_cliente = aux_no;
     }
 
 }
@@ -59,6 +76,15 @@ No *No::getProximoNo() {
     return this->proximo_no;
 }
 
+int No::getX() {
+    return this->x;
+}
+
+int No::getY() {
+    return this->y;
+}
+
+
 //Setters
 void No::setProximoNo(No *proximo_no) {
     this->proximo_no = proximo_no;
@@ -66,6 +92,32 @@ void No::setProximoNo(No *proximo_no) {
 
 void No::setPeso(float peso) {
     this->peso = peso;
+}
+
+
+void No::inserirCliente(int id, int x, int y){
+    //Verifica se existe pelo menos um Cliente, caso negativo, o primeiro Cliente sera setado
+    if(this->primeiro_cliente != nullptr){
+        No* no = new No(id,x,y);
+        this->ultimo_cliente -> setProximoNo(no);
+        this->ultimo_cliente = no;
+    }
+    else{
+        this->primeiro_cliente = new No(id,x,y);
+        this->ultimo_cliente = this->primeiro_cliente;
+    }
+}
+
+void No::mostrarClientes(ofstream& arquivo_saida) {
+    arquivo_saida<<"-----------CLIENTES------------"<<endl;
+    arquivo_saida<<"ID. X - Y"<<endl;
+    for(No* no = primeiro_cliente; no != nullptr; no = no->getProximoNo()){
+        arquivo_saida << no->getId() << ". ";
+        arquivo_saida << no->getX() << " - ";
+        arquivo_saida << no->getY();
+        arquivo_saida << endl;
+    }
+    arquivo_saida<<endl<<endl;
 }
 
 void No::inserirAresta(int id_destino, float peso) {
@@ -169,6 +221,9 @@ void No::diminuirGrauEntrada() {
 void No::diminuirGrauSaida() {
     this->grau_saida--;
 }
+
+
+
 
 
 
