@@ -11,8 +11,7 @@ int menu(){
 
     cout << "MENU" << endl;
     cout << "----" << endl;
-    cout << "[1] Mostrar Grafo" << endl;
-    cout << "[2] Mostrar Aps e suas coordenadas" << endl;
+    cout << "[1] Mostrar Aps e seus clientes" << endl;
     cout << "[0] Sair" << endl;
 
     cin >> selecao;
@@ -25,10 +24,11 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
 
     switch (selecao) {
         case 1:{
+            grafo->mostrarNos(arquivo_saida);
             break;
         }
         case 2:{
-            grafo->mostrarNos(arquivo_saida);
+
             break;
         }
         case 3:{

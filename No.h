@@ -13,13 +13,12 @@ private:
     int grau_entrada;
     int grau_saida;
     float peso;
+    float potencia;
     No* proximo_no;
     No* primeiro_cliente;
     No* ultimo_cliente;
     int x;
     int y;
-    float potencia;
-
 
 public:
     //Contrutor e Destrutor
@@ -34,16 +33,19 @@ public:
     int getGrauEntrada();
     int getGrauSaida();
     float getPeso();
+    float getPotencia();
     No *getProximoNo();
+    No *getPrimeiroCliente();
     int getX();
     int getY();
 
     //Setters
     void setProximoNo(No* proximo_no);
     void setPeso(float peso);
+    void setPotencia(float potencia);
 
     //Outros metodos
-    void inserirCliente(int id, int x, int y);
+    void inserirCliente(int id, int x, int y, float dist);
     void mostrarClientes(ofstream& arquivo_saida);
     void inserirAresta(int id_destino, float peso);
     void removerTodasArestas();

@@ -72,8 +72,16 @@ float No::getPeso() {
     return this->peso;
 }
 
+float No::getPotencia() {
+    return this->potencia;
+}
+
 No *No::getProximoNo() {
     return this->proximo_no;
+}
+
+No *No::getPrimeiroCliente() {
+    return this->primeiro_cliente;
 }
 
 int No::getX() {
@@ -85,6 +93,8 @@ int No::getY() {
 }
 
 
+
+
 //Setters
 void No::setProximoNo(No *proximo_no) {
     this->proximo_no = proximo_no;
@@ -94,27 +104,33 @@ void No::setPeso(float peso) {
     this->peso = peso;
 }
 
+void No::setPotencia(float potencia) {
+    this->potencia = potencia;
+}
 
-void No::inserirCliente(int id, int x, int y){
+void No::inserirCliente(int id, int x, int y, float dist){
     //Verifica se existe pelo menos um Cliente, caso negativo, o primeiro Cliente sera setado
     if(this->primeiro_cliente != nullptr){
         No* no = new No(id,x,y);
+        no->setPotencia(dist);
         this->ultimo_cliente -> setProximoNo(no);
         this->ultimo_cliente = no;
     }
     else{
         this->primeiro_cliente = new No(id,x,y);
+        this->primeiro_cliente->setPotencia(dist);
         this->ultimo_cliente = this->primeiro_cliente;
     }
 }
 
 void No::mostrarClientes(ofstream& arquivo_saida) {
     arquivo_saida<<"-----------CLIENTES------------"<<endl;
-    arquivo_saida<<"ID. X - Y"<<endl;
+    arquivo_saida<<"ID. X - Y / Dist ate o ap"<<endl;
     for(No* no = primeiro_cliente; no != nullptr; no = no->getProximoNo()){
         arquivo_saida << no->getId() << ". ";
         arquivo_saida << no->getX() << " - ";
-        arquivo_saida << no->getY();
+        arquivo_saida << no->getY() << " / ";
+        arquivo_saida << no->getPotencia();
         arquivo_saida << endl;
     }
     arquivo_saida<<endl<<endl;
