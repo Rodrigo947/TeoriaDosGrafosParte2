@@ -2,7 +2,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include "Grafo.h"
-#include "Gerador de numeros randomicos/util.h"
+
 
 using namespace std;
 int menu(){
