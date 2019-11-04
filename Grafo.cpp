@@ -116,13 +116,8 @@ void Grafo::inserirCliente(int id, int x, int y){
 
 //Verifica qual cliente possui a maior distancia para o ap
 void Grafo::definePotencia(){
-    float maior = 0;
-    for(No* ap = primeiro_no; ap != nullptr; ap = ap->getProximoNo()){
-
-        for(No* cliente = ap->getPrimeiroCliente(); cliente != nullptr; cliente = cliente->getProximoNo()){
-
-        }
-    }
+    for(No* ap = primeiro_no; ap != nullptr; ap = ap->getProximoNo())
+        ap->atribuirPotenciaTransmissao();
 }
 
 //Verifica se o No esta no Grafo
@@ -188,10 +183,11 @@ void Grafo::mostrarGrafo(ofstream& arquivo_saida) {
 void Grafo::mostrarNos(ofstream& arquivo_saida) {
     for(No* no = primeiro_no; no != nullptr; no = no->getProximoNo()){
         arquivo_saida<<"-----------AP------------"<<endl;
-        arquivo_saida<<"ID. X - Y"<<endl;
+        arquivo_saida<<"ID. X - Y / Potencia de Transmissao"<<endl;
         arquivo_saida << no->getId() << ". ";
         arquivo_saida << no->getX() << " - ";
-        arquivo_saida << no->getY();
+        arquivo_saida << no->getY() << " / ";
+        arquivo_saida << no->getPotencia();
         arquivo_saida << endl;
         no->mostrarClientes(arquivo_saida);
     }

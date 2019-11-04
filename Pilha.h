@@ -16,7 +16,7 @@ public:
     ~Pilha();
     int getTopo();           /// retorna valor do No do topo
     void empilha(int val);   /// insere No no topo
-    int desempilha();        /// elimina No do topo
+    void desempilha();        /// elimina No do topo
     bool vazia();            /// verifica se est� vazia
     bool contemNaPilha(int val);
     int tamanho();

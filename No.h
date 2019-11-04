@@ -51,6 +51,7 @@ public:
     void removerTodasArestas();
     bool procurarAresta(int id_destino); //Verifica se o no possui uma aresta para o no de destino
     int removerAresta(int id, bool direcionado, No* no_destino);
+    void atribuirPotenciaTransmissao(); //Verifica qual a distancia do cliente mais longe, essa distancia será a potencia do AP
 
 
     //Aumentar e diminuir o grau do no

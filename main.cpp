@@ -25,6 +25,8 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
     switch (selecao) {
         case 1:{
             grafo->mostrarNos(arquivo_saida);
+
+
             break;
         }
         case 2:{
@@ -48,15 +50,18 @@ Grafo* leitura(ifstream& arquivo_entrada){
     arquivo_entrada >> quantAps >> quantClientes;
     Grafo* grafo = new Grafo(quantAps);
 
+    //Inserindo aps
     for (int id = 0; id < quantAps; id++) {
         arquivo_entrada >> x >> y;
         grafo->inserirNo(id,x,y);
     }
-
+    //Inserindo clientes
     for (int id = 0; id < quantClientes; id++) {
         arquivo_entrada >> x >> y;
         grafo->inserirCliente(id,x,y);
     }
+    //Definindo potencia de cada ap
+    grafo->definePotencia();
 
     return grafo;
 
@@ -85,7 +90,10 @@ int main(int argc, char* argv[]) {
     else
         cout << "Nao foi possivel abrir o arquivo " << argv[1] << endl;
 
+
+
     int selecao = menu();
+
     while (selecao!=0){
         selecionar(selecao,grafo,arquivo_saida);
         selecao = menu();

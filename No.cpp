@@ -136,6 +136,17 @@ void No::mostrarClientes(ofstream& arquivo_saida) {
     arquivo_saida<<endl<<endl;
 }
 
+void No::atribuirPotenciaTransmissao() {
+    No* cliente = primeiro_cliente;
+    float maiorDistancia = cliente->getPotencia();
+    for(cliente = cliente->getProximoNo(); cliente != nullptr; cliente = cliente->getProximoNo()){
+        if(maiorDistancia<cliente->getPotencia()){
+            maiorDistancia = cliente->getPotencia();
+        }
+    }
+    this->potencia = maiorDistancia;
+}
+
 void No::inserirAresta(int id_destino, float peso) {
     //Verifica se existe pelo menos uma aresta no No, caso negativo, a primeira aresta sera setada
     if(this->primeira_aresta != nullptr){
@@ -237,6 +248,8 @@ void No::diminuirGrauEntrada() {
 void No::diminuirGrauSaida() {
     this->grau_saida--;
 }
+
+
 
 
 

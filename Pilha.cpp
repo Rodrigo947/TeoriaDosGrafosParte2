@@ -22,7 +22,7 @@ void Pilha::empilha(int val)
     tam++;
 }
 
-int Pilha::desempilha()
+void Pilha::desempilha()
 {
 
     if(tam != 0)
