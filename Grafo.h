@@ -59,5 +59,6 @@ public:
     void gulosoRandomizadoReativo(ofstream& arquivo_saida);
 
 
+    //void desenharSolucao();
 };
 #endif //TEORIADOSGRAFOS_GRAFO_H

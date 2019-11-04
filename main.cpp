@@ -29,13 +29,14 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
 
             break;
         }
-        case 2:{
 
-            break;
-        }
         case 3:{
 
             break;
+        }
+        case 9:{
+            //grafo->desenharSolucao();
+
         }
     }
 }
@@ -89,7 +90,6 @@ int main(int argc, char* argv[]) {
         grafo = leitura(arquivo_entrada);
     else
         cout << "Nao foi possivel abrir o arquivo " << argv[1] << endl;
-
 
 
     int selecao = menu();

@@ -138,13 +138,15 @@ void No::mostrarClientes(ofstream& arquivo_saida) {
 
 void No::atribuirPotenciaTransmissao() {
     No* cliente = primeiro_cliente;
-    float maiorDistancia = cliente->getPotencia();
-    for(cliente = cliente->getProximoNo(); cliente != nullptr; cliente = cliente->getProximoNo()){
-        if(maiorDistancia<cliente->getPotencia()){
-            maiorDistancia = cliente->getPotencia();
+    if(cliente!= nullptr){
+        float maiorDistancia = cliente->getPotencia();
+        for(cliente = cliente->getProximoNo(); cliente != nullptr; cliente = cliente->getProximoNo()){
+            if(maiorDistancia<cliente->getPotencia()){
+                maiorDistancia = cliente->getPotencia();
+            }
         }
+        this->potencia = maiorDistancia;
     }
-    this->potencia = maiorDistancia;
 }
 
 void No::inserirAresta(int id_destino, float peso) {

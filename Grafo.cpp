@@ -5,7 +5,8 @@
 #include "FilaEncadeada.h"
 #include "Pilha.h"
 #include <math.h>
-
+//#include <SFML/Graphics.hpp>
+//#include <cstdlib>
 
 using namespace std;
 
@@ -94,8 +95,8 @@ void Grafo::inserirNo(int id, int x, int y){
 
 //Add o cliente no ap que possui a menor distancia até ele
 void Grafo::inserirCliente(int id, int x, int y){
-
-    int menorDistancia,idMenor=0,x1=x,y1=y,x2,y2;
+    int idMenor=0,x1=x,y1=y,x2,y2;
+    float menorDistancia;
 
     No* ap = primeiro_no;
     x2 = ap->getX();
@@ -112,6 +113,10 @@ void Grafo::inserirCliente(int id, int x, int y){
         }
     }
     getNo(idMenor)->inserirCliente(id, x, y, menorDistancia);
+}
+
+float Grafo::distanciaEuclidiana(int x1,int y1,int x2, int y2){
+    return sqrt( (float) (pow(x1-x2,2) + pow(y1-y2,2)) );
 }
 
 //Verifica qual cliente possui a maior distancia para o ap
@@ -209,9 +214,7 @@ void Grafo::mostrarArestas(ofstream& arquivo_saida) {
 
 
 
-float Grafo::distanciaEuclidiana(int x1,int y1,int x2, int y2){
-    return sqrt( pow(x1-x2,2) + pow(y1-y2,2) );
-}
+
 
 
 //FUNCIONALIDADES
@@ -228,6 +231,77 @@ void Grafo::gulosoRandomizadoReativo(ofstream &arquivo_saida) {
 
 }
 
+/*void Grafo::desenharSolucao(){
 
+    using namespace sf;
+    RenderWindow window(VideoMode(1000, 1000), "APS e Ranges");
+
+    CircleShape *vetorDeAps = new CircleShape[ordem];
+    RectangleShape vetorDeClientes[200];
+    Text vetorDeIds[240];
+    int quantAps = 0,quantClientes = 0, quantIds=0,x=0,y=0,potencia=0;
+
+    for(No* ap = primeiro_no; ap != nullptr; ap = ap->getProximoNo()){
+        //AP
+        x = ap->getX();
+        y = ap->getY();
+        potencia = ap->getPotencia();
+        vetorDeAps[quantAps].setRadius(potencia*2);
+        vetorDeAps[quantAps].setOrigin(potencia*2,potencia*2);
+        vetorDeAps[quantAps].setPosition(x*2,y*2);
+        Color cor(rand()%254,rand()%254,rand()%254);
+        vetorDeAps[quantAps].setFillColor(cor);
+        window.draw(vetorDeAps[quantAps]);
+        quantAps++;
+
+
+        //Id do AP
+        Font fonte;
+        fonte.loadFromFile("arial.ttf");
+        Text texto(to_string(ap->getId()),fonte,15);
+        texto.setOrigin(15,15);
+        texto.setPosition(x*2,y*2);
+        vetorDeIds[quantIds] = texto;
+        window.draw(vetorDeIds[quantIds]);
+        quantIds++;
+
+        //Clientes
+        for(No* cliente = ap->getPrimeiroCliente(); cliente != nullptr; cliente = cliente->getProximoNo()){
+            x = cliente->getX();
+            y = cliente->getY();
+            RectangleShape rect(Vector2f(10,10));
+            rect.setOrigin(10,10);
+            rect.setFillColor(Color::Red);
+            rect.setPosition(x*2,y*2);
+            vetorDeClientes[quantClientes] = rect;
+            //window.draw(rect);
+            quantClientes++;
+
+            //Id do Cliente
+            Font fonte;
+            fonte.loadFromFile("arial.ttf");
+            Text texto(to_string(cliente->getId()),fonte,15);
+            texto.setOrigin(15,15);
+            texto.setPosition(x*2,y*2);
+            texto.setFillColor(Color::Black);
+            vetorDeIds[quantIds] = texto;
+            window.draw(texto);
+            quantIds++;
+
+        }
+    }
+    window.display();
+
+    while (window.isOpen())
+    {
+        Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+                window.close();
+        }
+
+    }
+}*/
 
 
