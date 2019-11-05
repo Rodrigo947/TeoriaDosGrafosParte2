@@ -2,26 +2,23 @@
 #define TEORIADOSGRAFOS_ARESTA_H
 class Aresta{
 private:
-    int id_origem;
-    int id_destino;
+    int id;
     Aresta* proxima_aresta;
     float peso;
 
 public:
     // Construtor e Destrutor
     Aresta();
-    Aresta(int id_origem,int id_destino);
+    Aresta(int id);
     ~Aresta();
     // Getters
-    int getIdOrigem();
-    int getIdDestino();
+    int getId();
     Aresta* getProximaAresta();
     float getPeso();
     // Setters
     void setProximaAresta(Aresta* aresta);
     void setPeso(float peso);
-    void setOrigem(int id_origem);
-    void setDestino(int id_destino);
+    void setId(int id);
 
 };
 #endif //TEORIADOSGRAFOS_ARESTA_H
