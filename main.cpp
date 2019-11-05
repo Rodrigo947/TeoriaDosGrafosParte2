@@ -12,6 +12,10 @@ int menu(){
     cout << "MENU" << endl;
     cout << "----" << endl;
     cout << "[1] Mostrar Aps e seus clientes" << endl;
+    cout << "[2] Mostrar Grafo de conflito" << endl;
+    cout << "[3] Guloso" << endl;
+    cout << "[4] Guloso Randomizado" << endl;
+    cout << "[5] Guloso Randomizado Reativo" << endl;
     cout << "[0] Sair" << endl;
 
     cin >> selecao;
@@ -25,12 +29,25 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
     switch (selecao) {
         case 1:{
             grafo->mostrarNos(arquivo_saida);
+            break;
+        }
 
-
+        case 2:{
+            grafo->mostrarGrafo(arquivo_saida);
             break;
         }
 
         case 3:{
+            grafo->guloso(arquivo_saida);
+            break;
+        }
+
+        case 4:{
+            grafo->gulosoRandomizado(arquivo_saida);
+            break;
+        }
+
+        case 5:{
 
             break;
         }
@@ -63,6 +80,9 @@ Grafo* leitura(ifstream& arquivo_entrada){
     }
     //Definindo potencia de cada ap
     grafo->definePotencia();
+
+    //Criar grafo de conflito
+    grafo->criarGrafoConflito();
 
     return grafo;
 

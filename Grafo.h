@@ -39,26 +39,27 @@ public:
 
     //Setters
     void setQuantAresta(int val);
-
     //Outros Metodos
     bool procurarNo(int id);
     No *retornaNo(int id);
     void inserirNo(int id,int x, int y);
-    void inserirAresta(int id, int id_destino, float peso);
+    void criarGrafoConflito();
     void mostrarGrafo(ofstream& arquivo_saida);
     void mostrarArestas(ofstream& arquivo_saida);
     void mostrarNos(ofstream& arquivo_saida);
-    void defineClientes();
     float distanciaEuclidiana(int x1, int y1, int x2, int y2);
     void inserirCliente(int id,int x, int y);
     void definePotencia(); //define a potencia para cada ap
 
     //FUNCIONALIDADES
+    int* baseCanais1611();
     void guloso(ofstream& arquivo_saida);
     void gulosoRandomizado(ofstream& arquivo_saida);
     void gulosoRandomizadoReativo(ofstream& arquivo_saida);
 
 
     //void desenharSolucao();
+
+
 };
 #endif //TEORIADOSGRAFOS_GRAFO_H
