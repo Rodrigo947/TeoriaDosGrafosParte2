@@ -7,10 +7,9 @@ using namespace std;
 No::No(int id, int x, int y){
 
     this->id = id;
-    this->grau_entrada = 0;
-    this->grau_saida = 0;
     this->peso = 0;
     this->potencia = 0;
+    this->canal = 0;
     this->primeira_aresta = nullptr;
     this->ultima_aresta = nullptr;
     this->proximo_no = nullptr;
@@ -56,13 +55,6 @@ Aresta *No::getUltimaAresta() {
     return this->ultima_aresta;
 }
 
-int No::getGrauEntrada() {
-    return this->grau_entrada;
-}
-
-int No::getGrauSaida() {
-    return this->grau_saida;
-}
 
 int No::getId() {
     return this->id;
@@ -92,6 +84,10 @@ int No::getY() {
     return this->y;
 }
 
+int No::getCanal() {
+    return this->canal;
+}
+
 
 
 
@@ -106,6 +102,10 @@ void No::setPeso(float peso) {
 
 void No::setPotencia(float potencia) {
     this->potencia = potencia;
+}
+
+void No::setCanal(int canal) {
+    this->canal = canal;
 }
 
 void No::inserirCliente(int id, int x, int y, float dist){
@@ -149,17 +149,15 @@ void No::atribuirPotenciaTransmissao() {
     }
 }
 
-void No::inserirAresta(int id_destino, float peso) {
+void No::inserirAresta(int id) {
     //Verifica se existe pelo menos uma aresta no No, caso negativo, a primeira aresta sera setada
     if(this->primeira_aresta != nullptr){
-        Aresta* aresta = new Aresta(this->id,id_destino);
-        aresta->setPeso(peso);
+        Aresta* aresta = new Aresta(id);
         this->ultima_aresta -> setProximaAresta(aresta);
         this->ultima_aresta = aresta;
     }
     else{
-        this->primeira_aresta = new Aresta(this->id,id_destino);
-        this->primeira_aresta -> setPeso(peso);
+        this->primeira_aresta = new Aresta(id);
         this->ultima_aresta = this->primeira_aresta;
     }
 
@@ -182,74 +180,18 @@ void No::removerTodasArestas() {
 }
 
 //Verifica se o no possui uma aresta para o no de destino
-bool No::procurarAresta(int id_destino) {
+bool No::procurarAresta(int id) {
     if(this->primeira_aresta != nullptr){
         for(Aresta* aux = this->primeira_aresta; aux!= nullptr; aux = aux->getProximaAresta()){
-            if(aux->getIdDestino() == id_destino)
+            if(aux->getId() == id)
                 return true;
         }
     }
         return false;
 }
 
-int No::removerAresta(int id, bool direcionado, No *no_destino) {
-    //Verifica se existe a aresta
-    if(this->procurarAresta(id)){
-        Aresta* aux = this->primeira_aresta;
-        Aresta* anterior = nullptr;
 
-        //Procurando a aresta a ser removida
-        while (aux->getIdDestino() != id){
-            anterior = aux;
-            aux = aux->getProximaAresta();
-        }
 
-        //Garantindo a integridade da lista de arestas
-        if(anterior != nullptr)
-            anterior->setProximaAresta(aux->getProximaAresta());
-        else
-            this->primeira_aresta = aux->getProximaAresta();
-
-        if(aux == this->ultima_aresta)
-            this->ultima_aresta = anterior;
-
-        if(aux->getProximaAresta() == this->ultima_aresta)
-            this->ultima_aresta = aux-> getProximaAresta();
-
-        delete aux;
-
-        //Grafo direcionado ou nao
-        if(direcionado){
-            this->diminuirGrauSaida();
-            no_destino->diminuirGrauEntrada();
-        }
-        else{
-            this->diminuirGrauEntrada();
-            no_destino->diminuirGrauEntrada();
-        }
-
-        return 1;
-
-    }
-
-    return 0;
-}
-
-void No::aumentarGrauEntrada() {
-    this->grau_entrada++;
-}
-
-void No::aumentarGrauSaida() {
-    this->grau_saida++;
-}
-
-void No::diminuirGrauEntrada() {
-    this->grau_entrada--;
-}
-
-void No::diminuirGrauSaida() {
-    this->grau_saida--;
-}
 
 
 

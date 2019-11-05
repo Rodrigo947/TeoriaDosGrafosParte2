@@ -10,10 +10,9 @@ private:
     Aresta* primeira_aresta;
     Aresta* ultima_aresta;
     int id;
-    int grau_entrada;
-    int grau_saida;
     float peso;
     float potencia;
+    int canal;
     No* proximo_no;
     No* primeiro_cliente;
     No* ultimo_cliente;
@@ -38,27 +37,23 @@ public:
     No *getPrimeiroCliente();
     int getX();
     int getY();
+    int getCanal();
 
     //Setters
     void setProximoNo(No* proximo_no);
     void setPeso(float peso);
     void setPotencia(float potencia);
+    void setCanal(int canal);
 
     //Outros metodos
     void inserirCliente(int id, int x, int y, float dist);
     void mostrarClientes(ofstream& arquivo_saida);
-    void inserirAresta(int id_destino, float peso);
+    void inserirAresta(int id);
     void removerTodasArestas();
     bool procurarAresta(int id_destino); //Verifica se o no possui uma aresta para o no de destino
-    int removerAresta(int id, bool direcionado, No* no_destino);
     void atribuirPotenciaTransmissao(); //Verifica qual a distancia do cliente mais longe, essa distancia será a potencia do AP
 
 
-    //Aumentar e diminuir o grau do no
-    void aumentarGrauEntrada();
-    void aumentarGrauSaida();
-    void diminuirGrauEntrada();
-    void diminuirGrauSaida();
 
 
 
