@@ -66,7 +66,7 @@ Grafo* leitura(ifstream& arquivo_entrada){
     int x,y;
 
     arquivo_entrada >> quantAps >> quantClientes;
-    Grafo* grafo = new Grafo(quantAps);
+    Grafo* grafo = new Grafo(quantAps,quantClientes);
 
     //Inserindo aps
     for (int id = 0; id < quantAps; id++) {

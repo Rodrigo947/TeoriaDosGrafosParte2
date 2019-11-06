@@ -7,9 +7,9 @@ using namespace std;
 No::No(int id, int x, int y){
 
     this->id = id;
-    this->peso = 0;
     this->potencia = 0;
     this->canal = 0;
+    this->interferencia = 0;
     this->primeira_aresta = nullptr;
     this->ultima_aresta = nullptr;
     this->proximo_no = nullptr;
@@ -60,8 +60,8 @@ int No::getId() {
     return this->id;
 }
 
-float No::getPeso() {
-    return this->peso;
+float No::getInterferencia() {
+    return this->interferencia;
 }
 
 float No::getPotencia() {
@@ -96,13 +96,15 @@ void No::setProximoNo(No *proximo_no) {
     this->proximo_no = proximo_no;
 }
 
-void No::setPeso(float peso) {
-    this->peso = peso;
-}
 
 void No::setPotencia(float potencia) {
     this->potencia = potencia;
 }
+
+void No::setInterferencia(float interferencia) {
+    this->interferencia = interferencia;
+}
+
 
 void No::setCanal(int canal) {
     this->canal = canal;

@@ -2,8 +2,6 @@
 #include <fstream>
 #include "Grafo.h"
 #include "No.h"
-#include "FilaEncadeada.h"
-#include "Pilha.h"
 #include <math.h>
 //#include <SFML/Graphics.hpp>
 //#include <cstdlib>
@@ -11,11 +9,146 @@
 using namespace std;
 
 //Construtor
-Grafo::Grafo(int ordem){
+Grafo::Grafo(int ordem, int quantClientes){
     this->ordem = ordem;
     this->primeiro_no = this->ultimo_no = nullptr;
     this->quant_aresta = 0;
+    this->quantClientes = quantClientes;
+    this->inteferenciaTotal = 0;
+    tabelaInterferencia[0][0] = 1;
+    tabelaInterferencia[0][1] = 0.77;
+    tabelaInterferencia[0][2] = 0.54;
+    tabelaInterferencia[0][3] = 0.31;
+    tabelaInterferencia[0][4] = 0.09;
+    tabelaInterferencia[0][5] = 0;
+    tabelaInterferencia[0][6] = 0;
+    tabelaInterferencia[0][7] = 0;
+    tabelaInterferencia[0][8] = 0;
+    tabelaInterferencia[0][9] = 0;
+    tabelaInterferencia[0][10] = 0;
+
+    tabelaInterferencia[1][0] = 0.77;
+    tabelaInterferencia[1][1] = 1;
+    tabelaInterferencia[1][2] = 0.77;
+    tabelaInterferencia[1][3] = 0.54;
+    tabelaInterferencia[1][4] = 0.31;
+    tabelaInterferencia[1][5] = 0.09;
+    tabelaInterferencia[1][6] = 0;
+    tabelaInterferencia[1][7] = 0;
+    tabelaInterferencia[1][8] = 0;
+    tabelaInterferencia[1][9] = 0;
+    tabelaInterferencia[1][10] = 0;
+
+    tabelaInterferencia[2][0] = 0.54;
+    tabelaInterferencia[2][1] = 0.77;
+    tabelaInterferencia[2][2] = 1;
+    tabelaInterferencia[2][3] = 0.77;
+    tabelaInterferencia[2][4] = 0.54;
+    tabelaInterferencia[2][5] = 0.31;
+    tabelaInterferencia[2][6] = 0.09;
+    tabelaInterferencia[2][7] = 0;
+    tabelaInterferencia[2][8] = 0;
+    tabelaInterferencia[2][9] = 0;
+    tabelaInterferencia[2][10] = 0;
+
+    tabelaInterferencia[3][0] = 0.31;
+    tabelaInterferencia[3][1] = 0.54;
+    tabelaInterferencia[3][2] = 0.77;
+    tabelaInterferencia[3][3] = 1;
+    tabelaInterferencia[3][4] = 0.77;
+    tabelaInterferencia[3][5] = 0.54;
+    tabelaInterferencia[3][6] = 0.31;
+    tabelaInterferencia[3][7] = 0.09;
+    tabelaInterferencia[3][8] = 0;
+    tabelaInterferencia[3][9] = 0;
+    tabelaInterferencia[3][10] = 0;
+
+    tabelaInterferencia[4][0] = 0.09;
+    tabelaInterferencia[4][1] = 0.31;
+    tabelaInterferencia[4][2] = 0.54;
+    tabelaInterferencia[4][3] = 0.77;
+    tabelaInterferencia[4][4] = 1;
+    tabelaInterferencia[4][5] = 0.77;
+    tabelaInterferencia[4][6] = 0.54;
+    tabelaInterferencia[4][7] = 0.31;
+    tabelaInterferencia[4][8] = 0.09;
+    tabelaInterferencia[4][9] = 0;
+    tabelaInterferencia[4][10] = 0;
+
+    tabelaInterferencia[5][0] = 0;
+    tabelaInterferencia[5][1] = 0.09;
+    tabelaInterferencia[5][2] = 0.31;
+    tabelaInterferencia[5][3] = 0.54;
+    tabelaInterferencia[5][4] = 0.77;
+    tabelaInterferencia[5][5] = 1;
+    tabelaInterferencia[5][6] = 0.77;
+    tabelaInterferencia[5][7] = 0.54;
+    tabelaInterferencia[5][8] = 0.31;
+    tabelaInterferencia[5][9] = 0.09;
+    tabelaInterferencia[5][10] = 0;
+
+    tabelaInterferencia[6][0] = 0;
+    tabelaInterferencia[6][1] = 0;
+    tabelaInterferencia[6][2] = 0.09;
+    tabelaInterferencia[6][3] = 0.31;
+    tabelaInterferencia[6][4] = 0.54;
+    tabelaInterferencia[6][5] = 0.77;
+    tabelaInterferencia[6][6] = 1;
+    tabelaInterferencia[6][7] = 0.77;
+    tabelaInterferencia[6][8] = 0.54;
+    tabelaInterferencia[6][9] = 0.31;
+    tabelaInterferencia[6][10] = 0.09;
+
+    tabelaInterferencia[7][0] = 0;
+    tabelaInterferencia[7][1] = 0;
+    tabelaInterferencia[7][2] = 0;
+    tabelaInterferencia[7][3] = 0.09;
+    tabelaInterferencia[7][4] = 0.31;
+    tabelaInterferencia[7][5] = 0.54;
+    tabelaInterferencia[7][6] = 0.77;
+    tabelaInterferencia[7][7] = 1;
+    tabelaInterferencia[7][8] = 0.77;
+    tabelaInterferencia[7][9] = 0.54;
+    tabelaInterferencia[7][10] = 0.31;
+
+    tabelaInterferencia[8][0] = 0;
+    tabelaInterferencia[8][1] = 0;
+    tabelaInterferencia[8][2] = 0;
+    tabelaInterferencia[8][3] = 0;
+    tabelaInterferencia[8][4] = 0.09;
+    tabelaInterferencia[8][5] = 0.31;
+    tabelaInterferencia[8][6] = 0.54;
+    tabelaInterferencia[8][7] = 0.77;
+    tabelaInterferencia[8][8] = 1;
+    tabelaInterferencia[8][9] = 0.77;
+    tabelaInterferencia[8][10] = 0.54;
+
+    tabelaInterferencia[9][0] = 0;
+    tabelaInterferencia[9][1] = 0;
+    tabelaInterferencia[9][2] = 0;
+    tabelaInterferencia[9][3] = 0;
+    tabelaInterferencia[9][4] = 0;
+    tabelaInterferencia[9][5] = 0.09;
+    tabelaInterferencia[9][6] = 0.31;
+    tabelaInterferencia[9][7] = 0.54;
+    tabelaInterferencia[9][8] = 0.77;
+    tabelaInterferencia[9][9] = 1;
+    tabelaInterferencia[9][10] = 0.77;
+
+    tabelaInterferencia[10][0] = 0;
+    tabelaInterferencia[10][1] = 0;
+    tabelaInterferencia[10][2] = 0;
+    tabelaInterferencia[10][3] = 0;
+    tabelaInterferencia[10][4] = 0;
+    tabelaInterferencia[10][5] = 0;
+    tabelaInterferencia[10][6] = 1;
+    tabelaInterferencia[10][7] = 0.77;
+    tabelaInterferencia[10][8] = 0.54;
+    tabelaInterferencia[10][9] = 0.31;
+    tabelaInterferencia[10][10] = 0.09;
+
 }
+
 Grafo::Grafo(){
 
 }
@@ -59,7 +192,9 @@ No *Grafo::getUltimoNo()
     return this->ultimo_no;
 }
 
-
+float Grafo::interferencia(int canal1, int canal2) {
+    return this->tabelaInterferencia[canal1-1][canal2-1];
+}
 
 //Setters
 
@@ -172,8 +307,10 @@ void Grafo::mostrarGrafo(ofstream& arquivo_saida) {
             else
                 arquivo_saida << "," << aux->getId();
         }
-        arquivo_saida<<" Canal: "<<no->getCanal()<<endl;
+        arquivo_saida<<" Canal: "<<no->getCanal();
+        arquivo_saida<<" Interferencia: "<<no->getInterferencia()<<endl;
     }
+    arquivo_saida<<" Interferencia Total do Grafo: "<<this->inteferenciaTotal<<endl;
     arquivo_saida<<endl<<endl;
 }
 
@@ -211,8 +348,10 @@ void Grafo::mostrarArestas(ofstream& arquivo_saida) {
 
 //FUNCIONALIDADES
 
+//Define todos os aps possiveis com os canais 1,6 e 11 ao final
+//retorna um vetor de ids dos aps sem um canal definido
 int* Grafo::baseCanais1611(){
-    //Definindo todos os aps possiveis com os canais 1,6 e 11
+
     int vetorDeCanais[ordem],cont=0,contId=0;
     int* vetorIdsSemCanais = new int[ordem];
     bool canal1,canal6,canal11;
@@ -261,11 +400,29 @@ int* Grafo::baseCanais1611(){
 
 void Grafo::guloso(ofstream &arquivo_saida) {
     int *vetorIdsSemCanais = baseCanais1611();
-    for (int i = 0;  ; i++) {
+    int vetorCanais[8]={3,8,4,9,2,5,7,10};
+    bool atribui=true;
+
+    for (int i = 0; ;i++) {
         if(vetorIdsSemCanais[i]==-1) break;
         No* ap = getNo(vetorIdsSemCanais[i]);
+        for (int canal = 0; canal < 8; canal++) {
 
+            for(Aresta* aresta = ap->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProximaAresta()) {
+                No *ap2 = getNo(aresta->getId());
+                if(ap2->getCanal()==vetorCanais[canal]) {
+                    atribui=false;
+                    break;
+                }
+            }
+            if(atribui){
+                ap->setCanal(vetorCanais[canal]);
+                break;
+            }
+        }
     }
+
+    defineInterferencias(vetorIdsSemCanais);
 
 }
 
@@ -277,10 +434,66 @@ void Grafo::gulosoRandomizadoReativo(ofstream &arquivo_saida) {
 
 }
 
+//Define o valor de interferencia para cada ap e para todo o grafo
+void Grafo::defineInterferencias(int idsNosInteferencia[]) {
+    No *ap2;
+    float somaTotalInteferencias = 0;
+    for (int i = 0; ;i++) {
+        if (idsNosInteferencia[i] == -1) break;
+        No *ap = getNo(idsNosInteferencia[i]);
+
+        for (No *cliente = ap->getPrimeiroCliente(); cliente != nullptr; cliente = cliente->getProximoNo()) {
+
+            for(Aresta* aresta = ap->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProximaAresta()) {
+                ap2 = getNo(aresta->getId());
+                //verifica se o canal do ap tem interferencia com o canal do ap2
+
+                if(interferencia(ap->getCanal(),ap2->getCanal())!=0){
+
+                    //verifica se o cliente esta na na interseccao entre o ap e ap2
+                    if(estaNaInterseccao(cliente,ap,ap2)){
+                        ap->setInterferencia( ap->getInterferencia() + interferencia(ap->getCanal(),ap2->getCanal()) );
+                        somaTotalInteferencias += interferencia(ap->getCanal(),ap2->getCanal());
+                    }
+                }
+            }
+        }
+
+    }
+    inteferenciaTotal=(somaTotalInteferencias/quantClientes);
+}
+
+//Retorna verdadeiro caso o cliente esteja na interseccao do raio de dois aps
+bool Grafo::estaNaInterseccao(No *cliente, No *ap, No*ap2){
+    bool contemAP1=false,contemAP2=false;
+    if(distanciaEuclidiana(cliente->getX(),cliente->getY(),ap->getX(),ap->getY()) <= ap->getPotencia()) contemAP1=true;
+    if(distanciaEuclidiana(cliente->getX(),cliente->getY(),ap2->getX(),ap2->getY()) <= ap2->getPotencia()) contemAP2=true;
+
+    if(contemAP1 && contemAP2) return true;
+    else return false;
+
+}
+
+
+
 /*void Grafo::desenharSolucao(){
 
     using namespace sf;
     RenderWindow window(VideoMode(650, 600), "APS e Ranges");
+
+    int coresParaCanais[11][3]={
+            {255,0,0},//1 Red
+            {170,110,40},//2 Brown
+            {255,225,25},//3 Yellow
+            {245,130,48},//4 Orange
+            {250,190,190},//5 Pink
+            {0,255,0},//6 Grenn
+            {240,50,230},//7 Magenta
+            {145,30,180},//8 Purple
+            {210,245,60},//9 Lime
+            {230,190,255},//10 Lavender
+            {0,0,255}//11 Blue
+    };
 
     CircleShape *vetorDeAps = new CircleShape[ordem];
     RectangleShape vetorDeClientes[200];
@@ -299,9 +512,11 @@ void Grafo::gulosoRandomizadoReativo(ofstream &arquivo_saida) {
         vetorDeAps[quantAps].setOrigin(potencia,potencia);
         vetorDeAps[quantAps].setPosition(x,y);
         Color cor(rand()%200,rand()%254,rand()%254);
+        int canal = ap->getCanal()-1;
+        Color color(coresParaCanais[canal][0],coresParaCanais[canal][1],coresParaCanais[canal][2]);
         vetorDeAps[quantAps].setFillColor(Color::Transparent);
         vetorDeAps[quantAps].setOutlineThickness(3);
-        vetorDeAps[quantAps].setOutlineColor(cor);
+        vetorDeAps[quantAps].setOutlineColor(color);
         window.draw(vetorDeAps[quantAps]);
         quantAps++;
 
@@ -315,24 +530,16 @@ void Grafo::gulosoRandomizadoReativo(ofstream &arquivo_saida) {
         vetorDeIds[quantIds].setOrigin(15,15);
         vetorDeIds[quantIds].setPosition(x,y);
         //vetorDeIds[quantIds] = texto;
-        //window.draw(vetorDeIds[quantIds]);
+        window.draw(vetorDeIds[quantIds]);
         quantIds++;
 
         //Clientes
         for(No* cliente = ap->getPrimeiroCliente(); cliente != nullptr; cliente = cliente->getProximoNo()){
             x = cliente->getX();
             y = cliente->getY();
-            /*RectangleShape rect(Vector2f(10,10));
-            rect.setOrigin(10,10);
-            rect.setFillColor(Color::Red);
-            rect.setPosition(x*2,y*2);
-            vetorDeClientes[quantClientes] = rect;
-            window.draw(rect);
-            quantClientes++;*/
 
             //Id do Cliente
-
-            /*vetorDeIds[quantIds].setFont(fonte);
+            vetorDeIds[quantIds].setFont(fonte);
             vetorDeIds[quantIds].setString(to_string(cliente->getId()));
             vetorDeIds[quantIds].setCharacterSize(15);
             vetorDeIds[quantIds].setOrigin(15,15);

@@ -10,8 +10,8 @@ private:
     Aresta* primeira_aresta;
     Aresta* ultima_aresta;
     int id;
-    float peso;
     float potencia;
+    float interferencia;
     int canal;
     No* proximo_no;
     No* primeiro_cliente;
@@ -29,9 +29,8 @@ public:
     Aresta* getPrimeiraAresta();
     Aresta* getUltimaAresta();
     int getId();
-    int getGrauEntrada();
-    int getGrauSaida();
-    float getPeso();
+
+    float getInterferencia();
     float getPotencia();
     No *getProximoNo();
     No *getPrimeiroCliente();
@@ -41,7 +40,7 @@ public:
 
     //Setters
     void setProximoNo(No* proximo_no);
-    void setPeso(float peso);
+    void setInterferencia(float interferencia);
     void setPotencia(float potencia);
     void setCanal(int canal);
 
