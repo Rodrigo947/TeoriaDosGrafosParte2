@@ -401,13 +401,13 @@ int* Grafo::baseCanais1611(){
 void Grafo::guloso(ofstream &arquivo_saida) {
     int *vetorIdsSemCanais = baseCanais1611();
     int vetorCanais[8]={3,8,4,9,2,5,7,10};
-    bool atribui=true;
+    bool atribui;
 
     for (int i = 0; ;i++) {
         if(vetorIdsSemCanais[i]==-1) break;
         No* ap = getNo(vetorIdsSemCanais[i]);
         for (int canal = 0; canal < 8; canal++) {
-
+            atribui=true;
             for(Aresta* aresta = ap->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProximaAresta()) {
                 No *ap2 = getNo(aresta->getId());
                 if(ap2->getCanal()==vetorCanais[canal]) {
@@ -436,30 +436,67 @@ void Grafo::gulosoRandomizadoReativo(ofstream &arquivo_saida) {
 
 //Define o valor de interferencia para cada ap e para todo o grafo
 void Grafo::defineInterferencias(int idsNosInteferencia[]) {
-    No *ap2;
+    No* ap;
+    No* ap2;
     float somaTotalInteferencias = 0;
+
+    //zerar todas as interferencias do grafo
+    for (No *ap = primeiro_no; ap != nullptr; ap = ap->getProximoNo())
+        ap->setInterferencia(0);
+
+
     for (int i = 0; ;i++) {
         if (idsNosInteferencia[i] == -1) break;
-        No *ap = getNo(idsNosInteferencia[i]);
+        ap = getNo(idsNosInteferencia[i]);
 
+        //Definindo interferencia dos Aps com canais diferentes de 1,6,11
         for (No *cliente = ap->getPrimeiroCliente(); cliente != nullptr; cliente = cliente->getProximoNo()) {
 
             for(Aresta* aresta = ap->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProximaAresta()) {
                 ap2 = getNo(aresta->getId());
-                //verifica se o canal do ap tem interferencia com o canal do ap2
 
+                //verifica se o canal do ap tem interferencia com o canal do ap2
                 if(interferencia(ap->getCanal(),ap2->getCanal())!=0){
 
-                    //verifica se o cliente esta na na interseccao entre o ap e ap2
+                    //verifica se o cliente esta na interseccao entre o ap e ap2
                     if(estaNaInterseccao(cliente,ap,ap2)){
                         ap->setInterferencia( ap->getInterferencia() + interferencia(ap->getCanal(),ap2->getCanal()) );
                         somaTotalInteferencias += interferencia(ap->getCanal(),ap2->getCanal());
+                        //AP possui interferencia no AP2 no cliente X com valor de interferencia Y"
+                        cout<<"AP:"<<ap->getId()<<" AP2:"<<ap2->getId()<<" Cliente:"<<cliente->getId()<<" Inter:"<<interferencia(ap->getCanal(),ap2->getCanal())<<endl;
                     }
+
+
                 }
             }
         }
 
+        //Definindo interferencia para cada Ap com canais 1,6,11 adjacentes
+        Aresta *aresta = ap->getPrimeiraAresta();
+        No *ap2 = getNo(aresta->getId());
+        while(aresta != nullptr){
+
+            for (No *cliente = ap2->getPrimeiroCliente(); cliente != nullptr; cliente = cliente->getProximoNo()) {
+
+                //verifica se o canal do ap tem interferencia com o canal do ap2
+                if(interferencia(ap->getCanal(),ap2->getCanal())!=0) {
+                    //verifica se o cliente esta na na interseccao entre o ap e ap2
+                    if (estaNaInterseccao(cliente, ap, ap2)) {
+                        ap2->setInterferencia(ap2->getInterferencia() + interferencia(ap->getCanal(), ap2->getCanal()));
+                        somaTotalInteferencias += interferencia(ap->getCanal(), ap2->getCanal());
+                        //AP possui interferencia no AP2 no cliente X com valor de interferencia Y"
+                        cout<<"AP:"<<ap->getId()<<" AP2:"<<ap2->getId()<<" Cliente:"<<cliente->getId()<<" Inter:"<<interferencia(ap->getCanal(),ap2->getCanal())<<endl;
+                    }
+                }
+
+            }
+            aresta = aresta->getProximaAresta();
+            if(aresta != nullptr) ap2 = getNo(aresta->getId());
+        }
+
+
     }
+
     inteferenciaTotal=(somaTotalInteferencias/quantClientes);
 }
 
@@ -501,7 +538,8 @@ bool Grafo::estaNaInterseccao(No *cliente, No *ap, No*ap2){
     Font fonte;
     fonte.loadFromFile("arial.ttf");
 
-    int quantAps = 0,quantClientes = 0, quantIds=0,x=0,y=0,potencia=0;
+    int quantAps = 0,quantClientes = 0, quantIds=0;
+    float x=0,y=0,potencia=0;
 
     for(No* ap = primeiro_no; ap != nullptr; ap = ap->getProximoNo()){
         //AP
@@ -544,7 +582,7 @@ bool Grafo::estaNaInterseccao(No *cliente, No *ap, No*ap2){
             vetorDeIds[quantIds].setCharacterSize(15);
             vetorDeIds[quantIds].setOrigin(15,15);
             vetorDeIds[quantIds].setPosition(x,y);
-            vetorDeIds[quantIds].setFillColor(Color::Red);
+            vetorDeIds[quantIds].setFillColor(color);
             quantIds++;
 
         }
