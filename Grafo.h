@@ -61,7 +61,7 @@ public:
     float gulosoRandomizado(float alfa, int quantInteracoes);
     float gulosoRandomizadoReativo();
 
-
+    int randomizaVetor(float alpha);
     void desenharSolucao();
 
 
