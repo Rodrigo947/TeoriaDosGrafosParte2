@@ -2,13 +2,12 @@
 #include <fstream>
 #include <stdlib.h>
 #include "Grafo.h"
-
+#include <math.h>
 
 using namespace std;
 int menu(){
 
     int selecao;
-
     cout << "MENU" << endl;
     cout << "----" << endl;
     cout << "[1] Mostrar Aps e seus clientes" << endl;

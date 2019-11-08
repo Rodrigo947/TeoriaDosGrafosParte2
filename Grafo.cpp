@@ -445,8 +445,6 @@ void Grafo::defineInterferencias(int idsNosInteferencia[]) {
                     if(estaNaInterseccao(cliente,ap,ap2)){
                         ap->setInterferencia( ap->getInterferencia() + interferencia(ap->getCanal(),ap2->getCanal()) );
                         somaTotalInteferencias += interferencia(ap->getCanal(),ap2->getCanal());
-                        //AP possui interferencia no AP2 no cliente X com valor de interferencia Y"
-                        cout<<"AP:"<<ap->getId()<<" AP2:"<<ap2->getId()<<" Cliente:"<<cliente->getId()<<" Inter:"<<interferencia(ap->getCanal(),ap2->getCanal())<<endl;
                     }
 
 
@@ -467,8 +465,6 @@ void Grafo::defineInterferencias(int idsNosInteferencia[]) {
                     if (estaNaInterseccao(cliente, ap, ap2)) {
                         ap2->setInterferencia(ap2->getInterferencia() + interferencia(ap->getCanal(), ap2->getCanal()));
                         somaTotalInteferencias += interferencia(ap->getCanal(), ap2->getCanal());
-                        //AP possui interferencia no AP2 no cliente X com valor de interferencia Y"
-                        cout<<"AP:"<<ap->getId()<<" AP2:"<<ap2->getId()<<" Cliente:"<<cliente->getId()<<" Inter:"<<interferencia(ap->getCanal(),ap2->getCanal())<<endl;
                     }
                 }
 
@@ -524,12 +520,12 @@ float Grafo::guloso() {
    return interferenciaTotal;
 
 }
-int Grafo::randomizaVetor(float alpha){
+int* Grafo::randomizaVetor(float alpha){
 
     int vetorCanais[8] = {3,8,4,9,2,5,7,10};
     int posic;
     int tamanho = 8;
-    int aux[8] = {-2,-2,-2,-2,-2,-2,-2,-2};
+    int *aux = new int[8];
     for(int i = 0; i < 8; i++){
         posic = rand()%(int)ceil(tamanho*alpha);
         if (vetorCanais[posic] != -1) {
@@ -557,9 +553,7 @@ float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
     int *vetorCanais = randomizaVetor(alfa);
     bool atribui;
     float melhorResultado = 99999,resultado;
-    for (int j = 0; j < 8; ++j) {
-       cout << vetorCanais[j] << " ";
-    }
+
     for (int i = 0; i < quantInteracoes; i++) {
 
         for (int i = 0; ;i++) {
@@ -585,7 +579,6 @@ float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
         if(resultado < melhorResultado) melhorResultado = resultado;
     }
 
-    cout << melhorResultado << " chegou" << endl;
     return melhorResultado;
 }
 
