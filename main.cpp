@@ -38,12 +38,60 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
         }
 
         case 3:{
-            grafo->guloso(arquivo_saida);
+            arquivo_saida << "-----------GULOSO------------" << endl;
+            arquivo_saida << "Interferencia Total: " << grafo->guloso() << endl;
             break;
         }
 
         case 4:{
-            grafo->gulosoRandomizado(arquivo_saida);
+            arquivo_saida << "-----------GULOSO RANDOMIZADO------------" << endl;
+            float melhorExecucao=99999,piorExecucao=0,media=0,execucaoAtual;
+
+
+            arquivo_saida << ">>>>>>>>>>ALFA 0.2<<<<<<<<<<" << endl;
+            arquivo_saida << "Execucao: Interferencia Total" << endl;
+            for (int i = 0; i < 30; i++){
+                execucaoAtual=grafo->gulosoRandomizado(0.2,1000);
+                media += execucaoAtual;
+                if(execucaoAtual<melhorExecucao) melhorExecucao = execucaoAtual;
+                if(execucaoAtual>piorExecucao) piorExecucao = execucaoAtual;
+
+                arquivo_saida << i+1 << ": " << execucaoAtual << endl;
+            }
+            arquivo_saida << "Melhor Execucao: " << melhorExecucao << endl;
+            arquivo_saida << "Pior Execucao: " << piorExecucao << endl;
+            arquivo_saida << "Media: " << media/30 << endl;
+            arquivo_saida << endl;
+
+            arquivo_saida << ">>>>>>>>>>ALFA 0.4<<<<<<<<<<" << endl;
+            arquivo_saida << "Execucao: Interferencia Total" << endl;
+            for (int i = 0; i < 30; i++){
+                execucaoAtual = grafo->gulosoRandomizado(0.4,1000);
+                media += execucaoAtual;
+                if(execucaoAtual<melhorExecucao) melhorExecucao = execucaoAtual;
+                if(execucaoAtual>piorExecucao) piorExecucao = execucaoAtual;
+
+                arquivo_saida << i+1 << ": "<< execucaoAtual << endl;
+            }
+            arquivo_saida << "Melhor Execucao: "<< melhorExecucao << endl;
+            arquivo_saida << "Pior Execucao: "<< piorExecucao << endl;
+            arquivo_saida << "Media: " << media/30 << endl;
+            arquivo_saida << endl;
+
+            arquivo_saida << ">>>>>>>>>>ALFA 0.5<<<<<<<<<<" << endl;
+            arquivo_saida << "Execucao: Interferencia Total" << endl;
+            for (int i = 0; i < 30; i++){
+                execucaoAtual = grafo->gulosoRandomizado(0.5,1000);
+                media += execucaoAtual;
+                if(execucaoAtual<melhorExecucao) melhorExecucao = execucaoAtual;
+                if(execucaoAtual>piorExecucao) piorExecucao = execucaoAtual;
+
+                arquivo_saida << i+1 << ": " << execucaoAtual << endl;
+            }
+            arquivo_saida << "Melhor Execucao: " << melhorExecucao << endl;
+            arquivo_saida << "Pior Execucao: " << piorExecucao << endl;
+            arquivo_saida << "Media: " << media/30 << endl;
+            arquivo_saida << endl;
             break;
         }
 
@@ -52,7 +100,7 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
             break;
         }
         case 9:{
-           // grafo->desenharSolucao();
+           //grafo->desenharSolucao();
 
         }
     }

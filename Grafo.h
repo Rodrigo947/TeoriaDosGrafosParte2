@@ -18,7 +18,7 @@ private:
     bool ponderado_no;
     No* primeiro_no;
     No* ultimo_no;
-    float inteferenciaTotal;
+    float interferenciaTotal;
     float tabelaInterferencia[11][11];
 
 public:
@@ -40,9 +40,9 @@ public:
 
     //Setters
     void setQuantAresta(int val);
+
     //Outros Metodos
-    bool procurarNo(int id);
-    No *retornaNo(int id);
+    bool procurarNo(int id); //Verifica se o No esta no Grafo
     void inserirNo(int id,int x, int y);
     void criarGrafoConflito();
     void mostrarGrafo(ofstream& arquivo_saida);
@@ -50,18 +50,19 @@ public:
     void mostrarNos(ofstream& arquivo_saida);
     float distanciaEuclidiana(int x1, int y1, int x2, int y2);
     void inserirCliente(int id,int x, int y);
-    void definePotencia(); //define a potencia para cada ap
 
-    //FUNCIONALIDADES
-    int* baseCanais1611();
-    void defineInterferencias(int idsNosInteferencia[]);
-    bool estaNaInterseccao(No *cliente, No *ap, No*ap2);
-    void guloso(ofstream& arquivo_saida);
-    void gulosoRandomizado(ofstream& arquivo_saida);
-    void gulosoRandomizadoReativo(ofstream& arquivo_saida);
+    void definePotencia(); //Verifica qual cliente possui a maior distancia para cada ap essa distancia ira definir a potencia do ap
+    int* baseCanais1611();//Define todos os aps possiveis com os canais 1,6 e 11 ao final retorna um vetor de ids dos aps sem um canal definido
+    void defineInterferencias(int idsNosInteferencia[]); //Define o valor de interferencia para cada ap  do grafo
+    bool possuiClientesNaInterseccao(No *ap, No*ap2); //Retorna verdadeiro caso possua clientes na interseccao do raio de dois aps
+    bool estaNaInterseccao(No *cliente, No *ap, No*ap2); //Retorna verdadeiro caso o cliente esteja na interseccao do raio de dois aps
+
+    float guloso();
+    float gulosoRandomizado(float alfa, int quantInteracoes);
+    float gulosoRandomizadoReativo();
 
 
-    //void desenharSolucao();
+    void desenharSolucao();
 
 
 

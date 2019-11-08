@@ -14,11 +14,9 @@ public:
     // Getters
     int getId();
     Aresta* getProximaAresta();
-    float getPeso();
     // Setters
     void setProximaAresta(Aresta* aresta);
-    void setPeso(float peso);
-    void setId(int id);
+
 
 };
 #endif //TEORIADOSGRAFOS_ARESTA_H

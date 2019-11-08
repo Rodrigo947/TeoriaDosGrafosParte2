@@ -14,7 +14,7 @@ Grafo::Grafo(int ordem, int quantClientes){
     this->primeiro_no = this->ultimo_no = nullptr;
     this->quant_aresta = 0;
     this->quantClientes = quantClientes;
-    this->inteferenciaTotal = 0;
+    this->interferenciaTotal = 0;
     tabelaInterferencia[0][0] = 1;
     tabelaInterferencia[0][1] = 0.77;
     tabelaInterferencia[0][2] = 0.54;
@@ -213,6 +213,19 @@ No *Grafo::getNo(int id){
     return nullptr;
 }
 
+//Verifica se o No esta no Grafo
+bool Grafo::procurarNo(int id){
+
+    if(this->primeiro_no != nullptr){
+        for(No* aux = primeiro_no; aux != nullptr; aux = aux->getProximoNo())
+            if(aux->getId() == id)
+                return true;
+    }
+
+    return false;
+
+}
+
 //Outros metodos
 
 void Grafo::inserirNo(int id, int x, int y){
@@ -254,29 +267,17 @@ float Grafo::distanciaEuclidiana(int x1,int y1,int x2, int y2){
     return sqrt( (float) (pow(x1-x2,2) + pow(y1-y2,2)) );
 }
 
-//Verifica qual cliente possui a maior distancia para o ap
+//Verifica qual cliente possui a maior distancia para cada ap essa distancia ira definir a potencia do ap
 void Grafo::definePotencia(){
     for(No* ap = primeiro_no; ap != nullptr; ap = ap->getProximoNo())
         ap->atribuirPotenciaTransmissao();
 }
 
-//Verifica se o No esta no Grafo
-bool Grafo::procurarNo(int id){
 
-    if(this->primeiro_no != nullptr){
-        for(No* aux = primeiro_no; aux != nullptr; aux = aux->getProximoNo())
-            if(aux->getId() == id)
-                return true;
-    }
-
-    return false;
-
-}
 
 void Grafo::criarGrafoConflito(){
     float distancia, somaRaio;
 
-    //Se algum No nao estiver no grafo
     for(No* ap = primeiro_no; ap != nullptr; ap = ap->getProximoNo()) {
 
         for(No* ap2 = ap->getProximoNo(); ap2 != nullptr; ap2 = ap2->getProximoNo()) {
@@ -284,9 +285,13 @@ void Grafo::criarGrafoConflito(){
             somaRaio = ap->getPotencia()+ap2->getPotencia();
 
             if(somaRaio >= distancia){
-                ap->inserirAresta(ap2->getId());
-                ap2->inserirAresta(ap->getId());
-                this->quant_aresta++;
+
+                if(possuiClientesNaInterseccao(ap,ap2)){
+                    ap->inserirAresta(ap2->getId());
+                    ap2->inserirAresta(ap->getId());
+                    this->quant_aresta++;
+                }
+
             }
 
         }
@@ -294,6 +299,23 @@ void Grafo::criarGrafoConflito(){
     }
 
 }
+//Retorna verdadeiro caso possua clientes na interseccao do raio de dois aps
+bool Grafo::possuiClientesNaInterseccao(No *ap,No *ap2){
+
+    //Pecorrendo todos os clientes do ap
+    for (No* cliente = ap->getPrimeiroCliente(); cliente != nullptr; cliente = cliente->getProximoNo()) {
+        if(estaNaInterseccao(cliente,ap,ap2)) return true;
+    }
+
+    //Pecorrendo todos os clientes do ap2
+    for (No* cliente = ap2->getPrimeiroCliente(); cliente != nullptr; cliente = cliente->getProximoNo()) {
+        if(estaNaInterseccao(cliente,ap,ap2)) return true;
+    }
+
+    return false;
+}
+
+
 
 
 void Grafo::mostrarGrafo(ofstream& arquivo_saida) {
@@ -310,7 +332,7 @@ void Grafo::mostrarGrafo(ofstream& arquivo_saida) {
         arquivo_saida<<" Canal: "<<no->getCanal();
         arquivo_saida<<" Interferencia: "<<no->getInterferencia()<<endl;
     }
-    arquivo_saida<<" Interferencia Total do Grafo: "<<this->inteferenciaTotal<<endl;
+    arquivo_saida<<" Interferencia Total do Grafo: "<<this->interferenciaTotal<<endl;
     arquivo_saida<<endl<<endl;
 }
 
@@ -335,7 +357,7 @@ void Grafo::mostrarArestas(ofstream& arquivo_saida) {
     arquivo_saida<<"[No de Origem , No de Destino] - Peso "<< endl;
     for(No* no = primeiro_no; no != nullptr; no = no->getProximoNo()){
         for(Aresta* aresta = no->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProximaAresta()) {
-            arquivo_saida << "[" << no->getId() << "," << aresta->getId() << "] - P: " << aresta->getPeso() << endl;
+            arquivo_saida << "[" << no->getId() << "," << aresta->getId() << "]" << endl;
         }
     }
     arquivo_saida<<endl<<endl;
@@ -343,14 +365,12 @@ void Grafo::mostrarArestas(ofstream& arquivo_saida) {
 
 
 
-
-
-
-//FUNCIONALIDADES
-
 //Define todos os aps possiveis com os canais 1,6 e 11 ao final
 //retorna um vetor de ids dos aps sem um canal definido
 int* Grafo::baseCanais1611(){
+    //zerar todas os canais do grafo
+    for (No *ap = primeiro_no; ap != nullptr; ap = ap->getProximoNo())
+        ap->setCanal(0);
 
     int vetorDeCanais[ordem],cont=0,contId=0;
     int* vetorIdsSemCanais = new int[ordem];
@@ -397,44 +417,7 @@ int* Grafo::baseCanais1611(){
     return vetorIdsSemCanais;
 }
 
-
-void Grafo::guloso(ofstream &arquivo_saida) {
-    int *vetorIdsSemCanais = baseCanais1611();
-    int vetorCanais[8]={3,8,4,9,2,5,7,10};
-    bool atribui;
-
-    for (int i = 0; ;i++) {
-        if(vetorIdsSemCanais[i]==-1) break;
-        No* ap = getNo(vetorIdsSemCanais[i]);
-        for (int canal = 0; canal < 8; canal++) {
-            atribui=true;
-            for(Aresta* aresta = ap->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProximaAresta()) {
-                No *ap2 = getNo(aresta->getId());
-                if(ap2->getCanal()==vetorCanais[canal]) {
-                    atribui=false;
-                    break;
-                }
-            }
-            if(atribui){
-                ap->setCanal(vetorCanais[canal]);
-                break;
-            }
-        }
-    }
-
-    defineInterferencias(vetorIdsSemCanais);
-
-}
-
-void Grafo::gulosoRandomizado(ofstream &arquivo_saida) {
-    baseCanais1611();
-}
-
-void Grafo::gulosoRandomizadoReativo(ofstream &arquivo_saida) {
-
-}
-
-//Define o valor de interferencia para cada ap e para todo o grafo
+//Define o valor de interferencia para cada ap  do grafo
 void Grafo::defineInterferencias(int idsNosInteferencia[]) {
     No* ap;
     No* ap2;
@@ -497,7 +480,7 @@ void Grafo::defineInterferencias(int idsNosInteferencia[]) {
 
     }
 
-    inteferenciaTotal=(somaTotalInteferencias/quantClientes);
+    interferenciaTotal=(somaTotalInteferencias/quantClientes);
 }
 
 //Retorna verdadeiro caso o cliente esteja na interseccao do raio de dois aps
@@ -510,6 +493,60 @@ bool Grafo::estaNaInterseccao(No *cliente, No *ap, No*ap2){
     else return false;
 
 }
+
+float Grafo::guloso() {
+    int *vetorIdsSemCanais = baseCanais1611();
+    int vetorCanais[8]={3,8,4,9,2,5,7,10};
+    bool atribui;
+
+    for (int i = 0; ;i++) {
+        if(vetorIdsSemCanais[i]==-1) break;
+        No* ap = getNo(vetorIdsSemCanais[i]);
+        for (int canal = 0; canal < 8; canal++) {
+            atribui=true;
+            for(Aresta* aresta = ap->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProximaAresta()) {
+                No *ap2 = getNo(aresta->getId());
+                if(ap2->getCanal()==vetorCanais[canal]) {
+                    atribui=false;
+                    break;
+                }
+            }
+            if(atribui){
+                ap->setCanal(vetorCanais[canal]);
+                break;
+            }
+        }
+    }
+
+    defineInterferencias(vetorIdsSemCanais);
+
+
+   return interferenciaTotal;
+
+}
+//executar guloso randomizado para cada instancia 30 vezes para cada alfa (0.2,0.4,0.5)
+float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
+    baseCanais1611();
+    float melhorResultado = 99999,resultado;
+
+    for (int i = 0; i < quantInteracoes; i++) {
+
+
+
+        resultado = interferenciaTotal;
+        if(resultado < melhorResultado) melhorResultado = resultado;
+    }
+
+
+    return interferenciaTotal;
+}
+
+float Grafo::gulosoRandomizadoReativo() {
+
+}
+
+
+
 
 
 
