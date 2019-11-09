@@ -59,10 +59,10 @@ public:
 
     float guloso();
     float gulosoRandomizado(float alfa, int quantInteracoes);
-    float* gulosoRandomizadoReativo(int quantInteracoes, float melhorResultado, float resultado, float melhorAlfa, float alfaAnterior);
+    float gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas);
 
     int* randomizaVetor(float alfa);
-    float randomizaAlfa(float melhorExecucao, float execucaoAtual, float melhorAlfa, float alfaAtual);
+    float randomizaAlfa(float *vetorAlfas);
     void desenharSolucao();
 
 

@@ -575,41 +575,27 @@ float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
                     break;
                 }
             }
+            vetorCanais = randomizaVetor(alfa);
         }
         defineInterferencias(vetorIdsSemCanais);
         resultado = interferenciaTotal;
         if(resultado < melhorResultado) melhorResultado = resultado;
     }
-    cout << "Resultado: "<< resultado << " || Melhor Resultado: " << melhorResultado << " || Alfa: "<< alfa << endl;
+
     return melhorResultado;
 
 }
-float Grafo::randomizaAlfa (float melhorExecucao, float execucaoAtual, float melhorAlfa, float alfaAtual){
-    float alfa;
-    //melhorExecução é melhor que a execução atual
-    if(melhorExecucao <= execucaoAtual && melhorAlfa >= alfaAtual){
-        alfa = melhorAlfa + 0.1;
-    }
-    if(melhorExecucao <= execucaoAtual && melhorAlfa <= alfaAtual){
-        alfa = melhorAlfa - 0.1;
-    }
-    //melhorExecução é pior que a execução atual
-    if(melhorExecucao >= execucaoAtual && melhorAlfa >= alfaAtual){
-        alfa = melhorAlfa + 0.1;
-    }
-    if(melhorExecucao >= execucaoAtual && melhorAlfa <= alfaAtual){
-        alfa = melhorAlfa - 0.1;
-    }
-    return alfa;
+float Grafo::randomizaAlfa (float *vetorAlfas){
+    return 0.1;
 }
 
-float* Grafo::gulosoRandomizadoReativo(int quantInteracoes, float melhorResultado, float resultado, float melhorAlfa, float alfaAnterior)  {
-    // este algoritmo retorna um vetor de duas posições, onde a primeira é o melhor resultado e a segunda é o melhor alfa
+float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
     int *vetorIdsSemCanais = baseCanais1611();
-    float alfaAtual = randomizaAlfa(melhorResultado,resultado,melhorAlfa,alfaAnterior);
-    int *vetorCanais = randomizaVetor(alfaAtual);
+    float alfa = randomizaAlfa(vetorAlfas);
+    int *vetorCanais = randomizaVetor(alfa);
     bool atribui;
-    float *vetorMelhores = new float[2];
+    float melhorResultado = 99999,resultado, melhorAlfa;
+
     for (int i = 0; i < quantInteracoes; i++) {
 
         for (int i = 0; ;i++) {
@@ -629,23 +615,18 @@ float* Grafo::gulosoRandomizadoReativo(int quantInteracoes, float melhorResultad
                     break;
                 }
             }
+            alfa = randomizaAlfa(vetorAlfas);
+            vetorCanais = randomizaVetor(alfa);
         }
         defineInterferencias(vetorIdsSemCanais);
         resultado = interferenciaTotal;
         if(resultado < melhorResultado) {
-            vetorMelhores[0] = resultado;
-            vetorMelhores[1] = alfaAtual;
+            melhorResultado = resultado;
+            melhorAlfa = alfa;
         }
     }
-    cout << "Resultado1: "<< resultado << " || Melhor Resultado: " << melhorResultado << " || Alfa: "<< alfaAtual << " || Melhor Alfa: " << melhorAlfa <<endl;
-    //cout << "Resultado2: "<< resultado << " || Melhor Resultado: " << vetorMelhores[0] << " || Alfa: "<< alfaAtual << " || Melhor Alfa: " << vetorMelhores[1] <<endl;
-    return vetorMelhores;
+    return melhorAlfa;
 }
-
-
-
-
-
 
 /*void Grafo::desenharSolucao(){
 
