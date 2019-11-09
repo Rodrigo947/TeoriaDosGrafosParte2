@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "Grafo.h"
 #include <math.h>
+#include <ctime>
 
 using namespace std;
 int menu(){
@@ -100,12 +101,15 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
 
         case 5:{
             arquivo_saida << "-----------GULOSO RANDOMIZADO REATIVO------------" << endl;
-            float melhorExecucao=99999,piorExecucao=0,media=0,*execucaoAtual = new float [2];
+            float melhorExecucao=99999,piorExecucao=0,media=0,*execucaoAtual = new float [2], melhorAlfa = ((rand()%9)/10.0)+0.1;
             arquivo_saida << "Execucao: Interferencia Total" << endl;
             for (int i = 0; i < 30; i++){
-                execucaoAtual=grafo->gulosoRandomizadoReativo(1000, melhorExecucao, execucaoAtual[0], execucaoAtual[1]);
+                execucaoAtual=grafo->gulosoRandomizadoReativo(1000, melhorExecucao, execucaoAtual[0], melhorAlfa, execucaoAtual[1]);
                 media += execucaoAtual[0];
-                if(execucaoAtual[0]<melhorExecucao) melhorExecucao = execucaoAtual[0];
+                if(execucaoAtual[0]<melhorExecucao){
+                    melhorExecucao = execucaoAtual[0];
+                    melhorAlfa = execucaoAtual[1];
+                }
                 if(execucaoAtual[0]>piorExecucao) piorExecucao = execucaoAtual[0];
 
                 arquivo_saida << i+1 << ": " << execucaoAtual[0] << endl;
@@ -154,7 +158,7 @@ Grafo* leitura(ifstream& arquivo_entrada){
 }
 
 int main(int argc, char* argv[]) {
-
+    srand(time(NULL));
     //Verificação se todos os parâmetros do programa foram encontrados
     if (argc != 3) {
 

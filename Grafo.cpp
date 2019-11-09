@@ -585,28 +585,28 @@ float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
 
 }
 float Grafo::randomizaAlfa (float melhorExecucao, float execucaoAtual, float melhorAlfa, float alfaAtual){
-    float alfa = melhorAlfa;
+    float alfa;
     //melhorExecução é melhor que a execução atual
-    if(melhorExecucao < execucaoAtual && melhorAlfa > alfaAtual){
+    if(melhorExecucao <= execucaoAtual && melhorAlfa >= alfaAtual){
         alfa = melhorAlfa + 0.1;
     }
-    if(melhorExecucao < execucaoAtual && melhorAlfa < alfaAtual){
+    if(melhorExecucao <= execucaoAtual && melhorAlfa <= alfaAtual){
         alfa = melhorAlfa - 0.1;
     }
     //melhorExecução é pior que a execução atual
-    if(melhorExecucao > execucaoAtual && melhorAlfa > alfaAtual){
+    if(melhorExecucao >= execucaoAtual && melhorAlfa >= alfaAtual){
         alfa = melhorAlfa + 0.1;
     }
-    if(melhorExecucao > execucaoAtual && melhorAlfa < alfaAtual){
+    if(melhorExecucao >= execucaoAtual && melhorAlfa <= alfaAtual){
         alfa = melhorAlfa - 0.1;
     }
     return alfa;
 }
 
-float* Grafo::gulosoRandomizadoReativo(int quantInteracoes, float melhorResultado, float resultado, float melhorAlfa)  {
+float* Grafo::gulosoRandomizadoReativo(int quantInteracoes, float melhorResultado, float resultado, float melhorAlfa, float alfaAnterior)  {
     // este algoritmo retorna um vetor de duas posições, onde a primeira é o melhor resultado e a segunda é o melhor alfa
     int *vetorIdsSemCanais = baseCanais1611();
-    float alfaAtual = ((rand()%9)/10.0)+0.1;
+    float alfaAtual = randomizaAlfa(melhorResultado,resultado,melhorAlfa,alfaAnterior);
     int *vetorCanais = randomizaVetor(alfaAtual);
     bool atribui;
     float *vetorMelhores = new float[2];
@@ -637,7 +637,8 @@ float* Grafo::gulosoRandomizadoReativo(int quantInteracoes, float melhorResultad
             vetorMelhores[1] = alfaAtual;
         }
     }
-    cout << "Resultado: "<< resultado << " || Melhor Resultado: " << vetorMelhores[0] << " || Alfa: "<< alfaAtual << " || Melhor Alfa: " << vetorMelhores[1] <<endl;
+    cout << "Resultado1: "<< resultado << " || Melhor Resultado: " << melhorResultado << " || Alfa: "<< alfaAtual << " || Melhor Alfa: " << melhorAlfa <<endl;
+    //cout << "Resultado2: "<< resultado << " || Melhor Resultado: " << vetorMelhores[0] << " || Alfa: "<< alfaAtual << " || Melhor Alfa: " << vetorMelhores[1] <<endl;
     return vetorMelhores;
 }
 
