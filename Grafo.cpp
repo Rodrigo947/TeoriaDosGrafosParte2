@@ -493,7 +493,7 @@ bool Grafo::estaNaInterseccao(No *cliente, No *ap, No*ap2){
 
 float Grafo::guloso() {
     int *vetorIdsSemCanais = baseCanais1611();
-int vetorCanais[8]={3,8,4,9,2,5,7,10};
+    int vetorCanais[8]={3,8,4,9,2,5,7,10};
     bool atribui;
 
     for (int i = 0; ;i++) {
@@ -549,15 +549,14 @@ int* Grafo::randomizaVetor(float alfa){
     return aux;
 }
 
-//executar guloso randomizado para cada instancia 30 vezes para cada alfa (0.2,0.4,0.5)
+
 float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
     int *vetorIdsSemCanais = baseCanais1611();
     int *vetorCanais = randomizaVetor(alfa);
     bool atribui;
-    float melhorResultado = 99999,resultado;
+    float melhorResultado = 99999, resultado;
 
     for (int i = 0; i < quantInteracoes; i++) {
-
         for (int i = 0; ;i++) {
             if(vetorIdsSemCanais[i]==-1) break;
             No* ap = getNo(vetorIdsSemCanais[i]);
@@ -575,11 +574,14 @@ float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
                     break;
                 }
             }
-            vetorCanais = randomizaVetor(alfa);
+
         }
         defineInterferencias(vetorIdsSemCanais);
         resultado = interferenciaTotal;
         if(resultado < melhorResultado) melhorResultado = resultado;
+
+        vetorCanais = randomizaVetor(alfa);
+        vetorIdsSemCanais = baseCanais1611();
     }
 
     return melhorResultado;
