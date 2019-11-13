@@ -104,10 +104,10 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
 
         case 5:{
             arquivo_saida << "-----------GULOSO RANDOMIZADO REATIVO------------" << endl;
-            float melhorExecucao=99999,piorExecucao=0,media=0,execucaoAtual;
+            float melhorExecucao=99999,piorExecucao=0,media=0,execucaoAtual, vetorAlfas[10] = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
             arquivo_saida << "Execucao: Interferencia Total" << endl;
-            for (int i = 0; i < 30; i++){
-                //execucaoAtual=grafo->gulosoRandomizadoReativo();
+            for (int i = 0; i < 3; i++){
+                execucaoAtual=grafo->gulosoRandomizadoReativo(1000,vetorAlfas);
                 media += execucaoAtual;
                 if(execucaoAtual<melhorExecucao) melhorExecucao = execucaoAtual;
                 if(execucaoAtual>piorExecucao) piorExecucao = execucaoAtual;

@@ -587,18 +587,19 @@ float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
     return melhorResultado;
 
 }
-float Grafo::randomizaAlfa (float *vetorAlfas){
-    return 0.1;
+float Grafo::randomizaAlfa (float *vetorAlfas, float *probabilidades, int * contador , float *custo){
+    return  vetorAlfas[rand()%10];
 }
 
 float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
-    int *vetorIdsSemCanais = baseCanais1611();
-    float alfa = randomizaAlfa(vetorAlfas);
+    int *vetorIdsSemCanais = baseCanais1611(),contador[10] = {0,0,0,0,0,0,0,0,0,0};
+    float probabilidades[10] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
+    float custos[10] = {0,0,0,0,0,0,0,0,0,0};
+    float melhorResultado = 99999, resultado, melhorAlfa  ,  alfa = randomizaAlfa(vetorAlfas, probabilidades, contador, custos);
     int *vetorCanais = randomizaVetor(alfa);
     bool atribui;
-    float melhorResultado = 99999,resultado, melhorAlfa;
 
-    for (int i = 0; i < quantInteracoes; i++) {
+    for (int i = 0, k = 0; i < quantInteracoes; i++, k++) {
 
         for (int i = 0; ;i++) {
             if(vetorIdsSemCanais[i]==-1) break;
@@ -617,17 +618,29 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
                     break;
                 }
             }
-            alfa = randomizaAlfa(vetorAlfas);
-            vetorCanais = randomizaVetor(alfa);
+
         }
+        float pos = 10*alfa-1;
+        custos[(int)pos] += resultado;
+        contador[(int)pos] += 1;
         defineInterferencias(vetorIdsSemCanais);
         resultado = interferenciaTotal;
         if(resultado < melhorResultado) {
             melhorResultado = resultado;
             melhorAlfa = alfa;
         }
+        if( k == quantInteracoes/100){
+            alfa = randomizaAlfa(vetorAlfas, probabilidades, contador, custos);
+            k=0;
+        }
+        vetorCanais = randomizaVetor(alfa);
+
     }
-    return melhorAlfa;
+    for (int j = 0; j < 10; ++j) {
+        cout << "Posicao: " <<j<<" custos: "<< custos[j] << " contador: " << contador[j] << endl;
+    }
+    cout << endl;
+    return melhorResultado;
 }
 
 /*void Grafo::desenharSolucao(){
