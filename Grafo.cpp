@@ -587,15 +587,37 @@ float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
     return melhorResultado;
 
 }
-float Grafo::randomizaAlfa (float *vetorAlfas, float *probabilidades, int * contador , float *custo){
-    return  vetorAlfas[rand()%10];
+float Grafo::randomizaAlfa (float *vetorAlfas, float *probabilidades, float *medias, float melhorAlfa){
+    float  aux, acm = 0, q[10] = {0,0,0,0,0,0,0,0,0,0};
+
+    for (int i = 0; i < 10; ++i) {
+        if(medias[i] != 0){
+            q[i] = pow(melhorAlfa/medias[i],10);
+            acm += q[i];
+        }
+    }
+    for (int i = 0; i < 10; ++i) {
+        if(q[i] != 0){
+            probabilidades[i] = q[i]/acm;
+        }
+    }
+    acm = 0;
+    aux = rand()%101;
+    for (int i = 0; i < 10; ++i) {
+        acm += probabilidades[i]*100;
+        if(aux <= acm) {
+            acm = i;
+            break;
+        }
+    }
+    return  vetorAlfas[(int)acm];
 }
 
 float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
     int *vetorIdsSemCanais = baseCanais1611(),contador[10] = {0,0,0,0,0,0,0,0,0,0};
     float probabilidades[10] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
     float custos[10] = {0,0,0,0,0,0,0,0,0,0};
-    float melhorResultado = 99999, resultado, melhorAlfa  ,  alfa = randomizaAlfa(vetorAlfas, probabilidades, contador, custos);
+    float melhorResultado = 99999, resultado, melhorAlfa  ,  alfa = vetorAlfas[rand()%10], medias[10] = {0,0,0,0,0,0,0,0,0,0};
     int *vetorCanais = randomizaVetor(alfa);
     bool atribui;
 
@@ -618,28 +640,36 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
                     break;
                 }
             }
-
         }
+        resultado = interferenciaTotal;
         float pos = 10*alfa-1;
         custos[(int)pos] += resultado;
         contador[(int)pos] += 1;
         defineInterferencias(vetorIdsSemCanais);
-        resultado = interferenciaTotal;
         if(resultado < melhorResultado) {
             melhorResultado = resultado;
             melhorAlfa = alfa;
         }
-        if( k == quantInteracoes/100){
-            alfa = randomizaAlfa(vetorAlfas, probabilidades, contador, custos);
+        for (int j = 0; j < 10; ++j) {
+            if(contador[j] > 0){
+                medias[j] = custos[j]/contador[j];
+            }
+        }
+        if(i < 20){
+            alfa = vetorAlfas[rand()%10];
+        }
+        if( k == quantInteracoes/10){
+            alfa = randomizaAlfa(vetorAlfas, probabilidades, medias, melhorAlfa);
             k=0;
         }
-        vetorCanais = randomizaVetor(alfa);
 
+        vetorCanais = randomizaVetor(alfa);
     }
-    for (int j = 0; j < 10; ++j) {
-        cout << "Posicao: " <<j<<" custos: "<< custos[j] << " contador: " << contador[j] << endl;
+    /*cout << melhorAlfa << endl;
+    for (int l = 0; l < 8; ++l) {
+        cout << vetorCanais[l] << " ";
     }
-    cout << endl;
+    cout << endl;*/
     return melhorResultado;
 }
 

@@ -30,7 +30,7 @@ void infoGulosoRandomizado(ofstream& arquivo_saida,Grafo* grafo, int execucoes,i
     float melhorTempo=9999999, piorTempo=0, mediaTempo=0 , tempoAtualSegundos;
 
     arquivo_saida << ">>>>>>>>>>ALFA "<<alfa<<"<<<<<<<<<<" << endl;
-    arquivo_saida << "Execucao: Interferencia Total / Tempo de Execução(segundos)" << endl;
+    arquivo_saida << "Execucão: Interferencia Total / Tempo de Execução(segundos)" << endl;
     for (int i = 0; i < execucoes; i++){
 
         auto start = high_resolution_clock::now();
@@ -98,6 +98,7 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
             infoGulosoRandomizado(arquivo_saida,grafo,30,1000,0.2);
             infoGulosoRandomizado(arquivo_saida,grafo,30,1000,0.4);
             infoGulosoRandomizado(arquivo_saida,grafo,30,1000,0.5);
+            infoGulosoRandomizado(arquivo_saida,grafo,30,1000,1);
 
             break;
         }
@@ -105,18 +106,37 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
         case 5:{
             arquivo_saida << "-----------GULOSO RANDOMIZADO REATIVO------------" << endl;
             float melhorExecucao=99999,piorExecucao=0,media=0,execucaoAtual, vetorAlfas[10] = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
-            arquivo_saida << "Execucao: Interferencia Total" << endl;
-            for (int i = 0; i < 3; i++){
+            float melhorTempo = 99999,piorTempo=0, mediaTempo=0, tempoAtualSegundos;
+            arquivo_saida << "Execucão: Interferencia Total / Tempo de Execução(segundos)" << endl;
+            for (int i = 0; i < 31; i++){
+                auto start = high_resolution_clock::now();
                 execucaoAtual=grafo->gulosoRandomizadoReativo(1000,vetorAlfas);
-                media += execucaoAtual;
-                if(execucaoAtual<melhorExecucao) melhorExecucao = execucaoAtual;
-                if(execucaoAtual>piorExecucao) piorExecucao = execucaoAtual;
+                auto stop = high_resolution_clock::now();
 
-                arquivo_saida << i+1 << ": " << execucaoAtual << endl;
+                media += execucaoAtual;
+                if(i > 0) {
+                    if (execucaoAtual < melhorExecucao) melhorExecucao = execucaoAtual;
+                    if (execucaoAtual > piorExecucao) piorExecucao = execucaoAtual;
+                    //INFO DE TEMPO DE EXECUÇÃO
+                    auto tempoAtual = duration_cast<microseconds>(stop - start);
+                    tempoAtualSegundos = tempoAtual.count()/1000000.0;
+                    mediaTempo += tempoAtualSegundos;
+                    if(tempoAtualSegundos<melhorTempo) melhorTempo = tempoAtualSegundos;
+                    if(tempoAtualSegundos>piorTempo) piorTempo = tempoAtualSegundos;
+                    arquivo_saida << i << ": " << execucaoAtual << " / "<< tempoAtualSegundos << endl;
+                }
+
+
             }
+
             arquivo_saida << "Melhor Execucao: " << melhorExecucao << endl;
             arquivo_saida << "Pior Execucao: " << piorExecucao << endl;
             arquivo_saida << "Media: " << media/30 << endl;
+            arquivo_saida << endl;
+            arquivo_saida << "INFO TEMPO" << endl;
+            arquivo_saida << "Melhor: " << melhorTempo << endl;
+            arquivo_saida << "Pior: " << piorTempo << endl;
+            arquivo_saida << "Media: " << mediaTempo/30 << endl << endl;
             arquivo_saida << endl;
             break;
         }
