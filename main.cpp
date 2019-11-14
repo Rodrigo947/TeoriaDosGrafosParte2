@@ -98,36 +98,34 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
             infoGulosoRandomizado(arquivo_saida,grafo,30,1000,0.2);
             infoGulosoRandomizado(arquivo_saida,grafo,30,1000,0.4);
             infoGulosoRandomizado(arquivo_saida,grafo,30,1000,0.5);
-            infoGulosoRandomizado(arquivo_saida,grafo,30,1000,1);
 
             break;
         }
 
         case 5:{
             arquivo_saida << "-----------GULOSO RANDOMIZADO REATIVO------------" << endl;
-            float melhorExecucao=99999,piorExecucao=0,media=0,execucaoAtual, vetorAlfas[10] = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
+            float melhorExecucao=99999,piorExecucao=0,media=0,execucaoAtual = 0, vetorAlfas[10] = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
             float melhorTempo = 99999,piorTempo=0, mediaTempo=0, tempoAtualSegundos;
             arquivo_saida << "Execucão: Interferencia Total / Tempo de Execução(segundos)" << endl;
-            for (int i = 0; i < 31; i++){
+            for (int i = 0; i < 30; i++){
+
                 auto start = high_resolution_clock::now();
                 execucaoAtual=grafo->gulosoRandomizadoReativo(1000,vetorAlfas);
                 auto stop = high_resolution_clock::now();
 
                 media += execucaoAtual;
-                if(i > 0) {
-                    if (execucaoAtual < melhorExecucao) melhorExecucao = execucaoAtual;
-                    if (execucaoAtual > piorExecucao) piorExecucao = execucaoAtual;
-                    //INFO DE TEMPO DE EXECUÇÃO
-                    auto tempoAtual = duration_cast<microseconds>(stop - start);
-                    tempoAtualSegundos = tempoAtual.count()/1000000.0;
-                    mediaTempo += tempoAtualSegundos;
-                    if(tempoAtualSegundos<melhorTempo) melhorTempo = tempoAtualSegundos;
-                    if(tempoAtualSegundos>piorTempo) piorTempo = tempoAtualSegundos;
-                    arquivo_saida << i << ": " << execucaoAtual << " / "<< tempoAtualSegundos << endl;
-                }
+                if (execucaoAtual < melhorExecucao) melhorExecucao = execucaoAtual;
+                if (execucaoAtual > piorExecucao) piorExecucao = execucaoAtual;
 
+                //INFO DE TEMPO DE EXECUÇÃO
 
-            }
+                auto tempoAtual = duration_cast<microseconds>(stop - start);
+                tempoAtualSegundos = tempoAtual.count()/1000000.0;
+                mediaTempo += tempoAtualSegundos;
+                if(tempoAtualSegundos<melhorTempo) melhorTempo = tempoAtualSegundos;
+                if(tempoAtualSegundos>piorTempo) piorTempo = tempoAtualSegundos;
+                arquivo_saida << i << ": " << execucaoAtual << " / "<< tempoAtualSegundos << endl;
+           }
 
             arquivo_saida << "Melhor Execucao: " << melhorExecucao << endl;
             arquivo_saida << "Pior Execucao: " << piorExecucao << endl;

@@ -589,20 +589,21 @@ float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
 }
 float Grafo::randomizaAlfa (float *vetorAlfas, float *probabilidades, float *medias, float melhorAlfa){
     float  aux, acm = 0, q[10] = {0,0,0,0,0,0,0,0,0,0};
-
+    // calcula q
     for (int i = 0; i < 10; ++i) {
         if(medias[i] != 0){
             q[i] = pow(melhorAlfa/medias[i],10);
             acm += q[i];
         }
     }
+    // altera a probabilidade de cada alfa ser escolhido com base no q. A soma de todas as posições do vetor é sempre 1.
     for (int i = 0; i < 10; ++i) {
-        if(q[i] != 0){
-            probabilidades[i] = q[i]/acm;
-        }
+        if(q[i] != 0) probabilidades[i] = q[i]/acm;
     }
     acm = 0;
+    // aux recebe um número aleatório entre 0 e 100
     aux = rand()%101;
+    //define, de acordo com o vetor de probabilidades e com o valor selecionado, qual será o alfa retornado
     for (int i = 0; i < 10; ++i) {
         acm += probabilidades[i]*100;
         if(aux <= acm) {
@@ -615,9 +616,8 @@ float Grafo::randomizaAlfa (float *vetorAlfas, float *probabilidades, float *med
 
 float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
     int *vetorIdsSemCanais = baseCanais1611(),contador[10] = {0,0,0,0,0,0,0,0,0,0};
-    float probabilidades[10] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
-    float custos[10] = {0,0,0,0,0,0,0,0,0,0};
-    float melhorResultado = 99999, resultado, melhorAlfa  ,  alfa = vetorAlfas[rand()%10], medias[10] = {0,0,0,0,0,0,0,0,0,0};
+    float custos[10] = {0,0,0,0,0,0,0,0,0,0}, medias[10] = {0,0,0,0,0,0,0,0,0,0}, probabilidades[10] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
+    float melhorResultado = 99999, resultado = 0, melhorAlfa = 0,  alfa = vetorAlfas[rand()%10];
     int *vetorCanais = randomizaVetor(alfa);
     bool atribui;
 
@@ -641,35 +641,36 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
                 }
             }
         }
-        resultado = interferenciaTotal;
-        float pos = 10*alfa-1;
-        custos[(int)pos] += resultado;
-        contador[(int)pos] += 1;
         defineInterferencias(vetorIdsSemCanais);
+        resultado = interferenciaTotal;
+        //precisei fazer dessa forma e não apenas colocar a conta como posição do vetor. Por problema de arredondamento as posições 6 e 8 nunca eram preenchidas.
+        float posicao = 10 * alfa - 1;
+        custos[(int)posicao] += resultado;
+        contador[(int)posicao] += 1;
+        //atualiza melhores resultado e alfa
         if(resultado < melhorResultado) {
             melhorResultado = resultado;
             melhorAlfa = alfa;
         }
+        //ataliza vetor de médias
         for (int j = 0; j < 10; ++j) {
             if(contador[j] > 0){
                 medias[j] = custos[j]/contador[j];
             }
         }
-        if(i < 20){
+        //as x primeiras interações são feitas com um alfa aleatório para que o vetor de médias esteja completo ao ser passado como parâmetro para a função randomizaAlfa.
+        if(i < 100){
             alfa = vetorAlfas[rand()%10];
         }
+        //quando k == 10% da quantidade de interações que deve ser feitas, o alfa é randomizado
         if( k == quantInteracoes/10){
             alfa = randomizaAlfa(vetorAlfas, probabilidades, medias, melhorAlfa);
             k=0;
         }
-
+        //atualiza vetor de canais de acordo com o alfa passado
         vetorCanais = randomizaVetor(alfa);
     }
-    /*cout << melhorAlfa << endl;
-    for (int l = 0; l < 8; ++l) {
-        cout << vetorCanais[l] << " ";
-    }
-    cout << endl;*/
+
     return melhorResultado;
 }
 
