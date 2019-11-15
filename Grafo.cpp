@@ -154,11 +154,9 @@ Grafo::Grafo(){
 
 }
 
-
 // Destrutor
 Grafo::~Grafo()
 {
-
     No *proximo_no = this->primeiro_no;
 
     while (proximo_no != nullptr)
@@ -168,39 +166,16 @@ Grafo::~Grafo()
         delete proximo_no;
         proximo_no = aux_no;
     }
-
-
 }
 
 //Getters
-
-int Grafo::getOrdem()
-{
-    return this->ordem;
-}
-int Grafo::getQuantAresta()
-{
-    return this->quant_aresta;
-}
-
-No *Grafo::getPrimeiroNo()
-{
-    return this->primeiro_no;
-}
-
-No *Grafo::getUltimoNo()
-{
-    return this->ultimo_no;
-}
+int Grafo::getOrdem(){return this->ordem;}
+int Grafo::getQuantAresta(){return this->quant_aresta;}
+No *Grafo::getPrimeiroNo(){return this->primeiro_no;}
+No *Grafo::getUltimoNo(){return this->ultimo_no;}
 
 float Grafo::interferencia(int canal1, int canal2) {
     return this->tabelaInterferencia[canal1-1][canal2-1];
-}
-
-//Setters
-
-void Grafo::setQuantAresta(int val){
-    this->quant_aresta++;
 }
 
 //Retorna um No com o determinado id, caso negativo retorna null
@@ -212,19 +187,6 @@ No *Grafo::getNo(int id){
     }
 
     return nullptr;
-}
-
-//Verifica se o No esta no Grafo
-bool Grafo::procurarNo(int id){
-
-    if(this->primeiro_no != nullptr){
-        for(No* aux = primeiro_no; aux != nullptr; aux = aux->getProximoNo())
-            if(aux->getId() == id)
-                return true;
-    }
-
-    return false;
-
 }
 
 //Outros metodos
@@ -351,21 +313,6 @@ void Grafo::mostrarNos(ofstream& arquivo_saida) {
     arquivo_saida<<endl<<endl;
 }
 
-
-
-void Grafo::mostrarArestas(ofstream& arquivo_saida) {
-    arquivo_saida<<"-----------ARESTAS------------"<<endl;
-    arquivo_saida<<"[No de Origem , No de Destino] - Peso "<< endl;
-    for(No* no = primeiro_no; no != nullptr; no = no->getProximoNo()){
-        for(Aresta* aresta = no->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProximaAresta()) {
-            arquivo_saida << "[" << no->getId() << "," << aresta->getId() << "]" << endl;
-        }
-    }
-    arquivo_saida<<endl<<endl;
-}
-
-
-
 //Define todos os aps possiveis com os canais 1,6 e 11 ao final
 //retorna um vetor de ids dos aps sem um canal definido
 int* Grafo::baseCanais1611(){
@@ -453,7 +400,7 @@ void Grafo::defineInterferencias(int idsNosInteferencia[]) {
             }
         }
 
-        //Definindo interferencia para cada Ap com canais 1,6,11 adjacentes
+        //Definindo interferencia para cada Ap adjacentes
         Aresta *aresta = ap->getPrimeiraAresta();
         No *ap2 = getNo(aresta->getId());
         while(aresta != nullptr){
@@ -473,8 +420,6 @@ void Grafo::defineInterferencias(int idsNosInteferencia[]) {
             aresta = aresta->getProximaAresta();
             if(aresta != nullptr) ap2 = getNo(aresta->getId());
         }
-
-
     }
 
     interferenciaTotal=(somaTotalInteferencias/quantClientes);
@@ -587,8 +532,8 @@ float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
     return melhorResultado;
 
 }
-float Grafo::randomizaAlfa (float *vetorAlfas, float *probabilidades, float *medias, float melhorSolucao){
-    float  aux, acm = 0, q[10] = {0,0,0,0,0,0,0,0,0,0};
+float Grafo::randomizaAlfa (float *vetorAlfas, double *probabilidades, double *medias, double melhorSolucao){
+    double  aux, acm = 0, q[10] = {0,0,0,0,0,0,0,0,0,0};
     // calcula q
     for (int i = 0; i < 10; ++i) {
         if(medias[i] != 0){
@@ -611,19 +556,13 @@ float Grafo::randomizaAlfa (float *vetorAlfas, float *probabilidades, float *med
             break;
         }
     }
-    acm = 0;
-    for (int j = 0; j < 10; ++j) {
-        acm += probabilidades[j];
-        cout << probabilidades[j] << " ";
-    }
-    cout << "Soma das probabilidades: " << acm << endl;
     return  vetorAlfas[(int)acm];
 }
 
 float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
     int *vetorIdsSemCanais = baseCanais1611(),contador[10] = {0,0,0,0,0,0,0,0,0,0};
-    float custos[10] = {0,0,0,0,0,0,0,0,0,0}, medias[10] = {0,0,0,0,0,0,0,0,0,0}, probabilidades[10] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
-    float melhorResultado = 99999, resultado = 0, melhorAlfa = 0,  alfa = vetorAlfas[rand()%10];
+    double custos[10] = {0,0,0,0,0,0,0,0,0,0}, medias[10] = {0,0,0,0,0,0,0,0,0,0}, probabilidades[10] = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1};
+    double melhorResultado = 99999, resultado = 0, melhorAlfa = 0,  alfa = vetorAlfas[rand()%10];
     int *vetorCanais = randomizaVetor(alfa);
     bool atribui;
 
@@ -649,7 +588,8 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
         }
         defineInterferencias(vetorIdsSemCanais);
         resultado = interferenciaTotal;
-        //precisei fazer dessa forma e não apenas colocar a conta como posição do vetor. Por problema de arredondamento as posições 6 e 8 nunca eram preenchidas.
+
+
         float posicao = 10 * alfa - 1;
         custos[(int)posicao] += resultado;
         contador[(int)posicao] += 1;
@@ -658,23 +598,25 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
             melhorResultado = resultado;
             melhorAlfa = alfa;
         }
-        //ataliza vetor de médias
+        //atualiza vetor de médias
         for (int j = 0; j < 10; ++j) {
             if(contador[j] > 0){
                 medias[j] = custos[j]/contador[j];
             }
         }
-        //as x primeiras interações são feitas com um alfa aleatório para que o vetor de médias esteja completo ao ser passado como parâmetro para a função randomizaAlfa.
-        if(i < 100){
+        //as x primeiras interações são feitas com um alfa aleatório para que o vetor de médias esteja
+        // completo ao ser passado como parâmetro para a função randomizaAlfa.
+        if(i < (int)ceil(quantInteracoes*0.1) ){ //Caso i for menor que 10% da quantidade de iterações
             alfa = vetorAlfas[rand()%10];
         }
         //quando k == 10% da quantidade de interações que deve ser feitas, o alfa é randomizado
-        if( k == quantInteracoes/10){
+        if( k == (int)ceil(quantInteracoes*0.1) ){
             alfa = randomizaAlfa(vetorAlfas, probabilidades, medias, melhorResultado);
             k=0;
         }
         //atualiza vetor de canais de acordo com o alfa passado
         vetorCanais = randomizaVetor(alfa);
+        vetorIdsSemCanais = baseCanais1611();
     }
 
     return melhorResultado;
@@ -683,7 +625,10 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
 /*void Grafo::desenharSolucao(){
 
     using namespace sf;
-    RenderWindow window(VideoMode(650, 600), "APS e Ranges");
+
+    RenderWindow window(VideoMode(1200, 650), "APS e Ranges");
+
+
 
     int coresParaCanais[11][3]={
             {255,0,0},//1 Red
@@ -699,13 +644,12 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
             {0,0,255}//11 Blue
     };
 
-    CircleShape *vetorDeAps = new CircleShape[ordem];
-    RectangleShape vetorDeClientes[200];
-    Text *vetorDeIds = new Text[240];
+    CircleShape circle;
+    Text *vetorDeIds = new Text[430];
     Font fonte;
     fonte.loadFromFile("arial.ttf");
 
-    int quantAps = 0,quantClientes = 0, quantIds=0;
+    int quantIds=0;
     float x=0,y=0,potencia=0;
 
     for(No* ap = primeiro_no; ap != nullptr; ap = ap->getProximoNo()){
@@ -713,29 +657,25 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
         x = ap->getX();
         y = ap->getY();
         potencia = ap->getPotencia();
-        vetorDeAps[quantAps].setRadius(potencia);
-        vetorDeAps[quantAps].setOrigin(potencia,potencia);
-        vetorDeAps[quantAps].setPosition(x,y);
+        circle.setRadius(potencia);
+        circle.setOrigin(potencia,potencia);
+        circle.setPosition(x+400,y+100);
         Color cor(rand()%200,rand()%254,rand()%254);
         int canal = ap->getCanal()-1;
         Color color(coresParaCanais[canal][0],coresParaCanais[canal][1],coresParaCanais[canal][2]);
-        vetorDeAps[quantAps].setFillColor(Color::Transparent);
-        vetorDeAps[quantAps].setOutlineThickness(3);
-        vetorDeAps[quantAps].setOutlineColor(color);
-        window.draw(vetorDeAps[quantAps]);
-        quantAps++;
-
+        circle.setFillColor(Color::Transparent);
+        circle.setOutlineThickness(1);
+        if(canal==-1)circle.setOutlineColor(Color::White);
+        else circle.setOutlineColor(color);
+        window.draw(circle);
 
         //Id do AP
 
-        //Text texto(to_string(ap->getId()),fonte,15);
         vetorDeIds[quantIds].setFont(fonte);
         vetorDeIds[quantIds].setString(to_string(ap->getId()));
         vetorDeIds[quantIds].setCharacterSize(15);
         vetorDeIds[quantIds].setOrigin(15,15);
-        vetorDeIds[quantIds].setPosition(x,y);
-        //vetorDeIds[quantIds] = texto;
-        window.draw(vetorDeIds[quantIds]);
+        vetorDeIds[quantIds].setPosition(x+400,y+100);
         quantIds++;
 
         //Clientes
@@ -748,7 +688,7 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
             vetorDeIds[quantIds].setString(to_string(cliente->getId()));
             vetorDeIds[quantIds].setCharacterSize(15);
             vetorDeIds[quantIds].setOrigin(15,15);
-            vetorDeIds[quantIds].setPosition(x,y);
+            vetorDeIds[quantIds].setPosition(x+400,y+100);
             vetorDeIds[quantIds].setFillColor(color);
             quantIds++;
 
@@ -757,8 +697,8 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
     for (int i = 0; i < quantIds; i++) {
         window.draw(vetorDeIds[i]);
     }
-    window.display();
 
+    window.display();
     while (window.isOpen())
     {
         Event event;

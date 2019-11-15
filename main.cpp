@@ -27,7 +27,8 @@ int menu(){
 
 void infoGulosoRandomizado(ofstream& arquivo_saida,Grafo* grafo, int execucoes,int interacoes,float alfa){
     float melhorExecucao=99999,piorExecucao=0,media=0,execucaoAtual;
-    float melhorTempo=9999999, piorTempo=0, mediaTempo=0 , tempoAtualSegundos;
+    float melhorTempo=9999999, piorTempo=0, mediaTempo=0;
+    double tempoAtualSegundos;
 
     arquivo_saida << ">>>>>>>>>>ALFA "<<alfa<<"<<<<<<<<<<" << endl;
     arquivo_saida << "Execucão: Interferencia Total / Tempo de Execução(segundos)" << endl;
@@ -95,10 +96,9 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
 
         case 4:{
             arquivo_saida << "-----------GULOSO RANDOMIZADO------------" << endl;
-            infoGulosoRandomizado(arquivo_saida,grafo,30,1000,0.2);
-            infoGulosoRandomizado(arquivo_saida,grafo,30,1000,0.4);
-            infoGulosoRandomizado(arquivo_saida,grafo,30,1000,0.5);
-
+            infoGulosoRandomizado(arquivo_saida,grafo,30,5,0.2);
+            infoGulosoRandomizado(arquivo_saida,grafo,30,5,0.4);
+            infoGulosoRandomizado(arquivo_saida,grafo,30,5,0.5);
             break;
         }
 
@@ -110,7 +110,7 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
             for (int i = 0; i < 30; i++){
 
                 auto start = high_resolution_clock::now();
-                execucaoAtual=grafo->gulosoRandomizadoReativo(1000,vetorAlfas);
+                execucaoAtual=grafo->gulosoRandomizadoReativo(100,vetorAlfas);
                 auto stop = high_resolution_clock::now();
 
                 media += execucaoAtual;

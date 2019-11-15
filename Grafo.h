@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include "No.h"
-#include "Pilha.h"
+
 
 using namespace std;
 
@@ -13,9 +13,6 @@ private:
     int ordem;
     int quantClientes;
     int quant_aresta;
-    bool direcionado;
-    bool ponderado_aresta;
-    bool ponderado_no;
     No* primeiro_no;
     No* ultimo_no;
     float interferenciaTotal;
@@ -38,15 +35,10 @@ public:
     No *getNo(int id);
     float interferencia(int canal1,int canal2);
 
-    //Setters
-    void setQuantAresta(int val);
-
     //Outros Metodos
-    bool procurarNo(int id); //Verifica se o No esta no Grafo
     void inserirNo(int id,int x, int y);
     void criarGrafoConflito();
     void mostrarGrafo(ofstream& arquivo_saida);
-    void mostrarArestas(ofstream& arquivo_saida);
     void mostrarNos(ofstream& arquivo_saida);
     float distanciaEuclidiana(int x1, int y1, int x2, int y2);
     void inserirCliente(int id,int x, int y);
@@ -62,7 +54,7 @@ public:
     float gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas);
 
     int* randomizaVetor(float alfa);
-    float randomizaAlfa(float *vetorAlfas, float *probabilidades, float *medias, float melhorSolucao);
+    float randomizaAlfa(float *vetorAlfas, double *probabilidades, double *medias, double melhorSolucao);
     void desenharSolucao();
 
 
