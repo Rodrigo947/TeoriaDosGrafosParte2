@@ -27,7 +27,6 @@ public:
 
     //Getters
     Aresta* getPrimeiraAresta();
-    Aresta* getUltimaAresta();
     int getId();
 
     float getInterferencia();
@@ -49,7 +48,6 @@ public:
     void mostrarClientes(ofstream& arquivo_saida);
     void inserirAresta(int id);
     void removerTodasArestas();
-    bool procurarAresta(int id_destino); //Verifica se o no possui uma aresta para o no de destino
     void atribuirPotenciaTransmissao(); //Verifica qual a distancia do cliente mais longe, essa distancia será a potencia do AP
 
 

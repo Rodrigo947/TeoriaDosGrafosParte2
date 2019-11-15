@@ -51,9 +51,6 @@ Aresta *No::getPrimeiraAresta() {
     return this->primeira_aresta;
 }
 
-Aresta *No::getUltimaAresta() {
-    return this->ultima_aresta;
-}
 
 
 int No::getId() {
@@ -181,16 +178,7 @@ void No::removerTodasArestas() {
     this->primeira_aresta = this->ultima_aresta = nullptr;
 }
 
-//Verifica se o no possui uma aresta para o no de destino
-bool No::procurarAresta(int id) {
-    if(this->primeira_aresta != nullptr){
-        for(Aresta* aux = this->primeira_aresta; aux!= nullptr; aux = aux->getProximaAresta()){
-            if(aux->getId() == id)
-                return true;
-        }
-    }
-        return false;
-}
+
 
 
 
