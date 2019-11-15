@@ -124,7 +124,7 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
                 mediaTempo += tempoAtualSegundos;
                 if(tempoAtualSegundos<melhorTempo) melhorTempo = tempoAtualSegundos;
                 if(tempoAtualSegundos>piorTempo) piorTempo = tempoAtualSegundos;
-                arquivo_saida << i << ": " << execucaoAtual << " / "<< tempoAtualSegundos << endl;
+                arquivo_saida << i+1 << ": " << execucaoAtual << " / "<< tempoAtualSegundos << endl;
            }
 
             arquivo_saida << "Melhor Execucao: " << melhorExecucao << endl;

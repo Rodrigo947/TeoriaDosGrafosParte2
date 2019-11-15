@@ -587,12 +587,12 @@ float Grafo::gulosoRandomizado(float alfa, int quantInteracoes) {
     return melhorResultado;
 
 }
-float Grafo::randomizaAlfa (float *vetorAlfas, float *probabilidades, float *medias, float melhorAlfa){
+float Grafo::randomizaAlfa (float *vetorAlfas, float *probabilidades, float *medias, float melhorSolucao){
     float  aux, acm = 0, q[10] = {0,0,0,0,0,0,0,0,0,0};
     // calcula q
     for (int i = 0; i < 10; ++i) {
         if(medias[i] != 0){
-            q[i] = pow(melhorAlfa/medias[i],10);
+            q[i] = pow(melhorSolucao/medias[i],10);
             acm += q[i];
         }
     }
@@ -611,6 +611,12 @@ float Grafo::randomizaAlfa (float *vetorAlfas, float *probabilidades, float *med
             break;
         }
     }
+    acm = 0;
+    for (int j = 0; j < 10; ++j) {
+        acm += probabilidades[j];
+        cout << probabilidades[j] << " ";
+    }
+    cout << "Soma das probabilidades: " << acm << endl;
     return  vetorAlfas[(int)acm];
 }
 
@@ -664,7 +670,7 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
         }
         //quando k == 10% da quantidade de interações que deve ser feitas, o alfa é randomizado
         if( k == quantInteracoes/10){
-            alfa = randomizaAlfa(vetorAlfas, probabilidades, medias, melhorAlfa);
+            alfa = randomizaAlfa(vetorAlfas, probabilidades, medias, melhorResultado);
             k=0;
         }
         //atualiza vetor de canais de acordo com o alfa passado
