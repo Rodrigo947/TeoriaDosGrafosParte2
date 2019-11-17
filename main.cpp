@@ -25,7 +25,7 @@ int menu(){
 
 }
 
-void infoGulosoRandomizado(ofstream& arquivo_saida,Grafo* grafo, int execucoes,int interacoes,float alfa){
+void infoGulosoRandomizado(ofstream& arquivo_saida,Grafo* grafo, int execucoes,int interacoes,float alfa,float vetResultados[]){
     float melhorExecucao=99999,piorExecucao=0,media=0,execucaoAtual;
     float melhorTempo=9999999, piorTempo=0, mediaTempo=0;
     double tempoAtualSegundos;
@@ -64,6 +64,8 @@ void infoGulosoRandomizado(ofstream& arquivo_saida,Grafo* grafo, int execucoes,i
     arquivo_saida << "Pior: " << piorTempo << endl;
     arquivo_saida << "Media: " << mediaTempo/30 << endl << endl;
     arquivo_saida << endl;
+    vetResultados[0]+=media;
+    vetResultados[1]+=mediaTempo;
 }
 
 
@@ -89,23 +91,28 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
             auto stop = high_resolution_clock::now();
 
             auto duration = duration_cast<microseconds>(stop - start);
-            arquivo_saida << resultado<<" / "<< duration.count()/1000000.0 << endl <<endl;
-
+            double tempoEmSegundos = duration.count()*1000000.0;
+            arquivo_saida << resultado<<" / "<< tempoEmSegundos  << endl <<endl;
             break;
         }
 
         case 4:{
             arquivo_saida << "-----------GULOSO RANDOMIZADO------------" << endl;
-            infoGulosoRandomizado(arquivo_saida,grafo,30,5,0.2);
-            infoGulosoRandomizado(arquivo_saida,grafo,30,5,0.4);
-            infoGulosoRandomizado(arquivo_saida,grafo,30,5,0.5);
+            float vetResultados[2] = {0,0};
+            infoGulosoRandomizado(arquivo_saida,grafo,30,5,0.2,vetResultados);
+            infoGulosoRandomizado(arquivo_saida,grafo,30,5,0.4,vetResultados);
+            infoGulosoRandomizado(arquivo_saida,grafo,30,5,0.5,vetResultados);
+            arquivo_saida << endl;
+            arquivo_saida << "Media de interferencia todos alfas: " << vetResultados[0]/90 << endl;
+            arquivo_saida << "Media do tempo de todos alfas: " << vetResultados[1]/30 <<endl;
             break;
         }
 
         case 5:{
             arquivo_saida << "-----------GULOSO RANDOMIZADO REATIVO------------" << endl;
             float melhorExecucao=99999,piorExecucao=0,media=0,execucaoAtual = 0, vetorAlfas[10] = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
-            float melhorTempo = 99999,piorTempo=0, mediaTempo=0, tempoAtualSegundos;
+            float melhorTempo = 99999,piorTempo=0, mediaTempo=0;
+            double tempoAtualSegundos;
             arquivo_saida << "Execucão: Interferencia Total / Tempo de Execução(segundos)" << endl;
             for (int i = 0; i < 30; i++){
 
@@ -138,10 +145,7 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
             arquivo_saida << endl;
             break;
         }
-        case 9:{
-           //grafo->desenharSolucao();
 
-        }
     }
 }
 

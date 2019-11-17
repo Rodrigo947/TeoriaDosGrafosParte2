@@ -55,9 +55,6 @@ public:
 
     int* randomizaVetor(float alfa);
     float randomizaAlfa(float *vetorAlfas, double *probabilidades, double *medias, double melhorSolucao);
-    void desenharSolucao();
-
-
 
 };
 #endif //TEORIADOSGRAFOS_GRAFO_H

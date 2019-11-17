@@ -4,8 +4,6 @@
 #include "Grafo.h"
 #include "No.h"
 #include <math.h>
-//#include <SFML/Graphics.hpp>
-//#include <cstdlib>
 
 using namespace std;
 
@@ -622,93 +620,6 @@ float Grafo::gulosoRandomizadoReativo(int quantInteracoes, float* vetorAlfas)  {
     return melhorResultado;
 }
 
-/*void Grafo::desenharSolucao(){
 
-    using namespace sf;
-
-    RenderWindow window(VideoMode(1200, 650), "APS e Ranges");
-
-
-
-    int coresParaCanais[11][3]={
-            {255,0,0},//1 Red
-            {170,110,40},//2 Brown
-            {255,225,25},//3 Yellow
-            {245,130,48},//4 Orange
-            {250,190,190},//5 Pink
-            {0,255,0},//6 Grenn
-            {240,50,230},//7 Magenta
-            {145,30,180},//8 Purple
-            {210,245,60},//9 Lime
-            {230,190,255},//10 Lavender
-            {0,0,255}//11 Blue
-    };
-
-    CircleShape circle;
-    Text *vetorDeIds = new Text[430];
-    Font fonte;
-    fonte.loadFromFile("arial.ttf");
-
-    int quantIds=0;
-    float x=0,y=0,potencia=0;
-
-    for(No* ap = primeiro_no; ap != nullptr; ap = ap->getProximoNo()){
-        //AP
-        x = ap->getX();
-        y = ap->getY();
-        potencia = ap->getPotencia();
-        circle.setRadius(potencia);
-        circle.setOrigin(potencia,potencia);
-        circle.setPosition(x+400,y+100);
-        Color cor(rand()%200,rand()%254,rand()%254);
-        int canal = ap->getCanal()-1;
-        Color color(coresParaCanais[canal][0],coresParaCanais[canal][1],coresParaCanais[canal][2]);
-        circle.setFillColor(Color::Transparent);
-        circle.setOutlineThickness(1);
-        if(canal==-1)circle.setOutlineColor(Color::White);
-        else circle.setOutlineColor(color);
-        window.draw(circle);
-
-        //Id do AP
-
-        vetorDeIds[quantIds].setFont(fonte);
-        vetorDeIds[quantIds].setString(to_string(ap->getId()));
-        vetorDeIds[quantIds].setCharacterSize(15);
-        vetorDeIds[quantIds].setOrigin(15,15);
-        vetorDeIds[quantIds].setPosition(x+400,y+100);
-        quantIds++;
-
-        //Clientes
-        for(No* cliente = ap->getPrimeiroCliente(); cliente != nullptr; cliente = cliente->getProximoNo()){
-            x = cliente->getX();
-            y = cliente->getY();
-
-            //Id do Cliente
-            vetorDeIds[quantIds].setFont(fonte);
-            vetorDeIds[quantIds].setString(to_string(cliente->getId()));
-            vetorDeIds[quantIds].setCharacterSize(15);
-            vetorDeIds[quantIds].setOrigin(15,15);
-            vetorDeIds[quantIds].setPosition(x+400,y+100);
-            vetorDeIds[quantIds].setFillColor(color);
-            quantIds++;
-
-        }
-    }
-    for (int i = 0; i < quantIds; i++) {
-        window.draw(vetorDeIds[i]);
-    }
-
-    window.display();
-    while (window.isOpen())
-    {
-        Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == Event::Closed)
-                window.close();
-        }
-
-    }
-}*/
 
 
