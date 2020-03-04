@@ -114,7 +114,7 @@ void selecionar(int selecao, Grafo* grafo, ofstream& arquivo_saida){
             float melhorTempo = 99999,piorTempo=0, mediaTempo=0;
             double tempoAtualSegundos;
             arquivo_saida << "Execucão: Interferencia Total / Tempo de Execução(segundos)" << endl;
-            for (int i = 0; i < 30; i++){
+            for (int i = 0; i < 100; i++){
 
                 auto start = high_resolution_clock::now();
                 execucaoAtual=grafo->gulosoRandomizadoReativo(100,vetorAlfas);

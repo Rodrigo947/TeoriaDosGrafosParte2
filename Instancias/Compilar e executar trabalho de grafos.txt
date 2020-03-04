@@ -1,2 +1,2 @@
 g++ *.c* -o exec.exe
-exec.exe instance_1.txt resultado.txt
+exec.exe Instancias/instance_1 resultado.txt
