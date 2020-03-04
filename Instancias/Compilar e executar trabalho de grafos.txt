@@ -1,0 +1,2 @@
+g++ *.c* -o exec.exe
+exec.exe instance_1.txt resultado.txt

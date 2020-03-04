@@ -197,10 +197,13 @@ int main(int argc, char* argv[]) {
 
 	Grafo* grafo = new Grafo();
 
-    if(arquivo_entrada.is_open())
+    if(arquivo_entrada.is_open() )
         grafo = leitura(arquivo_entrada);
-    else
+    else{
         cout << "Nao foi possivel abrir o arquivo " << argv[1] << endl;
+        return 0;
+    }
+
 
 
     int selecao = menu();
